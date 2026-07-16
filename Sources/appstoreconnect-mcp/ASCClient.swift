@@ -1286,4 +1286,130 @@ public struct ASCClient {
         )
         return try await self.provider.request(request)
     }
+
+    // MARK: - Phase 9: Visible Apps, Custom Product Pages, and Version Experiments
+    
+    /// List visible apps for a user
+    public func listUserVisibleApps(userId: String) async throws -> AppStoreConnect_Swift_SDK.AppsWithoutIncludesResponse {
+        let request = APIEndpoint.v1.users.id(userId).visibleApps.get()
+        return try await self.provider.request(request)
+    }
+    
+    private struct UserVisibleAppsLinkagesRequestLocal: Encodable {
+        struct Datum: Encodable {
+            let type = "apps"
+            let id: String
+        }
+        let data: [Datum]
+    }
+    
+    /// Add visible apps for a user (restricts user access to these apps)
+    public func addUserVisibleApps(userId: String, appIds: [String]) async throws {
+        let data = appIds.map { UserVisibleAppsLinkagesRequestLocal.Datum(id: $0) }
+        let body = UserVisibleAppsLinkagesRequestLocal(data: data)
+        let request = Request<Void>(
+            path: "v1/users/\(userId)/relationships/visibleApps",
+            method: "POST",
+            body: body,
+            id: "users-visibleApps-create"
+        )
+        try await self.provider.request(request)
+    }
+    
+    /// List Custom Product Pages for an app
+    public func listCustomProductPages(appId: String) async throws -> AppStoreConnect_Swift_SDK.AppCustomProductPagesResponse {
+        let request = APIEndpoint.v1.apps.id(appId).appCustomProductPages.get()
+        return try await self.provider.request(request)
+    }
+    
+    private struct AppCustomProductPageCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let name: String
+            }
+            struct Relationships: Encodable {
+                struct App: Encodable {
+                    struct AppData: Encodable {
+                        let type = "apps"
+                        let id: String
+                    }
+                    let data: AppData
+                }
+                let app: App
+            }
+            let type = "appCustomProductPages"
+            let attributes: Attributes
+            let relationships: Relationships
+        }
+        let data: Data
+    }
+    
+    /// Create a new Custom Product Page for an app
+    public func createCustomProductPage(appId: String, name: String) async throws -> AppStoreConnect_Swift_SDK.AppCustomProductPageResponse {
+        let body = AppCustomProductPageCreateRequestLocal(
+            data: .init(
+                attributes: .init(name: name),
+                relationships: .init(app: .init(data: .init(id: appId)))
+            )
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.AppCustomProductPageResponse>(
+            path: "v1/appCustomProductPages",
+            method: "POST",
+            body: body,
+            id: "appCustomProductPages-post"
+        )
+        return try await self.provider.request(request)
+    }
+    
+    /// List App Store Version Experiments (A/B Tests) for an app
+    public func listVersionExperiments(appId: String) async throws -> AppStoreConnect_Swift_SDK.AppStoreVersionExperimentsV2Response {
+        let request = APIEndpoint.v1.apps.id(appId).appStoreVersionExperimentsV2.get()
+        return try await self.provider.request(request)
+    }
+    
+    private struct AppStoreVersionExperimentV2CreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let name: String
+                let platform: String
+                let trafficProportion: Int
+            }
+            struct Relationships: Encodable {
+                struct App: Encodable {
+                    struct AppData: Encodable {
+                        let type = "apps"
+                        let id: String
+                    }
+                    let data: AppData
+                }
+                let app: App
+            }
+            let type = "appStoreVersionExperiments"
+            let attributes: Attributes
+            let relationships: Relationships
+        }
+        let data: Data
+    }
+    
+    /// Create a new App Store Version Experiment (A/B Test) for an app
+    public func createVersionExperiment(
+        appId: String,
+        name: String,
+        platform: String,
+        trafficProportion: Int
+    ) async throws -> AppStoreConnect_Swift_SDK.AppStoreVersionExperimentV2Response {
+        let body = AppStoreVersionExperimentV2CreateRequestLocal(
+            data: .init(
+                attributes: .init(name: name, platform: platform, trafficProportion: trafficProportion),
+                relationships: .init(app: .init(data: .init(id: appId)))
+            )
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.AppStoreVersionExperimentV2Response>(
+            path: "v2/appStoreVersionExperiments",
+            method: "POST",
+            body: body,
+            id: "appStoreVersionExperimentsV2-post"
+        )
+        return try await self.provider.request(request)
+    }
 }

@@ -725,6 +725,76 @@ public struct ToolHandlers {
                     isError: false
                 )
                 
+            case "list_user_visible_apps":
+                struct Args: Codable { let user_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let apps = try await client.listUserVisibleApps(userId: args.user_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(apps), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "add_user_visible_apps":
+                struct Args: Codable {
+                    let user_id: String
+                    let app_ids: [String]
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                try await client.addUserVisibleApps(userId: args.user_id, appIds: args.app_ids)
+                return CallTool.Result(
+                    content: [.text(text: "Successfully granted app visibility limits for user \(args.user_id).", annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "list_custom_product_pages":
+                struct Args: Codable { let app_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let pages = try await client.listCustomProductPages(appId: args.app_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(pages), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "create_custom_product_page":
+                struct Args: Codable {
+                    let app_id: String
+                    let name: String
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let page = try await client.createCustomProductPage(appId: args.app_id, name: args.name)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(page), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "list_version_experiments":
+                struct Args: Codable { let app_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let experiments = try await client.listVersionExperiments(appId: args.app_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(experiments), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "create_version_experiment":
+                struct Args: Codable {
+                    let app_id: String
+                    let name: String
+                    let platform: String
+                    let traffic_proportion: Int
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let experiment = try await client.createVersionExperiment(
+                    appId: args.app_id,
+                    name: args.name,
+                    platform: args.platform,
+                    trafficProportion: args.traffic_proportion
+                )
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(experiment), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+                
             default:
                 return CallTool.Result(
                     content: [.text(text: "Unknown tool: \(name)", annotations: nil, _meta: nil)],

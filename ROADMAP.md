@@ -88,7 +88,7 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 - **Team Members**:
   - [x] List all people and roles under the developer account (Implemented: `list_users`)
   - [x] Change team member roles (Implemented: `update_user_role`)
-  - [ ] Restrict non-admin users to specific app visibility
+  - [x] Restrict non-admin users to specific app visibility (Implemented: `list_user_visible_apps`, `add_user_visible_apps`)
 - **User Invitations**:
   - [x] Send email invitations to new team members (Implemented: `invite_team_user`)
   - [x] Revoke or delete pending invitations (Implemented: `delete_user_invitation`)
@@ -112,6 +112,6 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 ---
 
 ### 8. Advanced Marketing Features
-- [ ] Create and configure custom product pages
-- [ ] Configure App Store A/B test experiments
+- [x] Create and configure custom product pages (Implemented: `list_custom_product_pages`, `create_custom_product_page`)
+- [x] Configure App Store A/B test experiments (Implemented: `list_version_experiments`, `create_version_experiment`)
 - [ ] Create in-app event promotions

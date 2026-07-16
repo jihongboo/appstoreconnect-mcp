@@ -800,6 +800,83 @@ public struct ToolDefinitions {
         ])
     )
 
+    public static let listUserVisibleApps = Tool(
+        name: "list_user_visible_apps",
+        description: "List apps visible to a specific non-admin user.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "user_id": .object(["type": .string("string"), "description": .string("The unique ID of the user.")])
+            ]),
+            "required": .array([.string("user_id")])
+        ])
+    )
+    
+    public static let addUserVisibleApps = Tool(
+        name: "add_user_visible_apps",
+        description: "Grant specific apps visibility to a non-admin user.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "user_id": .object(["type": .string("string"), "description": .string("The unique ID of the user.")]),
+                "app_ids": .object(["type": .array([.string("string")]), "description": .string("Array of App unique IDs.")])
+            ]),
+            "required": .array([.string("user_id"), .string("app_ids")])
+        ])
+    )
+    
+    public static let listCustomProductPages = Tool(
+        name: "list_custom_product_pages",
+        description: "List Custom Product Pages for a specific app.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_id": .object(["type": .string("string"), "description": .string("The unique ID of the app.")])
+            ]),
+            "required": .array([.string("app_id")])
+        ])
+    )
+    
+    public static let createCustomProductPage = Tool(
+        name: "create_custom_product_page",
+        description: "Create a new Custom Product Page for an app.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_id": .object(["type": .string("string"), "description": .string("The unique ID of the app.")]),
+                "name": .object(["type": .string("string"), "description": .string("The promotional name of the custom product page.")])
+            ]),
+            "required": .array([.string("app_id"), .string("name")])
+        ])
+    )
+    
+    public static let listVersionExperiments = Tool(
+        name: "list_version_experiments",
+        description: "List App Store Version Experiments (A/B Tests) for an app.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_id": .object(["type": .string("string"), "description": .string("The unique ID of the app.")])
+            ]),
+            "required": .array([.string("app_id")])
+        ])
+    )
+    
+    public static let createVersionExperiment = Tool(
+        name: "create_version_experiment",
+        description: "Create a new App Store Version Experiment (A/B Test) for an app.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_id": .object(["type": .string("string"), "description": .string("The unique ID of the app.")]),
+                "name": .object(["type": .string("string"), "description": .string("The name of the A/B test experiment.")]),
+                "platform": .object(["type": .string("string"), "description": .string("Platform: IOS, MAC_OS, TV_OS, VISION_OS.")]),
+                "traffic_proportion": .object(["type": .string("integer"), "description": .string("Traffic split percentage (e.g. 50).")])
+            ]),
+            "required": .array([.string("app_id"), .string("name"), .string("platform"), .string("traffic_proportion")])
+        ])
+    )
+
     public static let allTools = [
         listApps,
         getAppDetails,
@@ -859,6 +936,12 @@ public struct ToolDefinitions {
         createSubscription,
         listSubscriptionLocalizations,
         createSubscriptionLocalization,
-        updateSubscriptionLocalization
+        updateSubscriptionLocalization,
+        listUserVisibleApps,
+        addUserVisibleApps,
+        listCustomProductPages,
+        createCustomProductPage,
+        listVersionExperiments,
+        createVersionExperiment
     ]
 }
