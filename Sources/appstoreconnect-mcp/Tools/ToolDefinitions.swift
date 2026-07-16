@@ -548,6 +548,101 @@ public struct ToolDefinitions {
         inputSchema: .object(["type": .string("object"), "properties": .object([:])])
     )
 
+    public static let downloadSalesReports = Tool(
+        name: "download_sales_and_trends_reports",
+        description: "Download App Store Sales and Trends Reports (decompressed CSV format).",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "vendor_number": .object(["type": .string("string"), "description": .string("The Apple vendor number, e.g. 8xxxxxx.")]),
+                "report_type": .object(["type": .string("string"), "description": .string("The report type: SALES, PRE_ORDER, NEWSSTAND, SUBSCRIPTION, SUBSCRIPTION_EVENT, SUBSCRIBER, SUBSCRIPTION_OFFER_CODE_REDEMPTION, INSTALLS, FIRST_ANNUAL, WIN_BACK_ELIGIBILITY.")]),
+                "sub_type": .object(["type": .string("string"), "description": .string("The report sub-type: SUMMARY, DETAILED, SUMMARY_INSTALL_TYPE, SUMMARY_TERRITORY, SUMMARY_CHANNEL.")]),
+                "frequency": .object(["type": .string("string"), "description": .string("The frequency: DAILY, WEEKLY, MONTHLY, YEARLY.")]),
+                "date": .object(["type": .string("string"), "description": .string("Optional report date (YYYY-MM-DD or YYYY-MM for monthly).")]),
+                "version": .object(["type": .string("string"), "description": .string("Optional report version (e.g. '1_0').")])
+            ]),
+            "required": .array([.string("vendor_number"), .string("report_type"), .string("sub_type"), .string("frequency")])
+        ])
+    )
+    
+    public static let downloadFinanceReports = Tool(
+        name: "download_finance_reports",
+        description: "Download App Store Financial Reports (decompressed CSV format).",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "vendor_number": .object(["type": .string("string"), "description": .string("The Apple vendor number, e.g. 8xxxxxx.")]),
+                "report_type": .object(["type": .string("string"), "description": .string("The report type: FINANCIAL, FINANCE_DETAIL.")]),
+                "region_code": .object(["type": .string("string"), "description": .string("The region code (e.g. US, CN, EU).")]),
+                "date": .object(["type": .string("string"), "description": .string("The report date (YYYY-MM).")])
+            ]),
+            "required": .array([.string("vendor_number"), .string("report_type"), .string("region_code"), .string("date")])
+        ])
+    )
+    
+    public static let listInAppPurchases = Tool(
+        name: "list_in_app_purchases",
+        description: "List all In-App Purchases (V2) for a specific app.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_id": .object(["type": .string("string"), "description": .string("The unique identifier (ID) of the app.")])
+            ]),
+            "required": .array([.string("app_id")])
+        ])
+    )
+    
+    public static let createInAppPurchase = Tool(
+        name: "create_in_app_purchase",
+        description: "Create a new In-App Purchase (V2) item.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_id": .object(["type": .string("string"), "description": .string("The unique identifier (ID) of the app.")]),
+                "name": .object(["type": .string("string"), "description": .string("The name of the in-app purchase.")]),
+                "product_id": .object(["type": .string("string"), "description": .string("The unique product ID (SKU) for IAP.")]),
+                "type": .object(["type": .string("string"), "description": .string("Type: CONSUMABLE, NON_CONSUMABLE, NON_RENEWING_SUBSCRIPTION.")])
+            ]),
+            "required": .array([.string("app_id"), .string("name"), .string("product_id"), .string("type")])
+        ])
+    )
+    
+    public static let deleteBetaGroup = Tool(
+        name: "delete_beta_group",
+        description: "Delete an existing TestFlight Beta Group.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "beta_group_id": .object(["type": .string("string"), "description": .string("The Beta Group ID.")])
+            ]),
+            "required": .array([.string("beta_group_id")])
+        ])
+    )
+    
+    public static let deleteUserInvitation = Tool(
+        name: "delete_user_invitation",
+        description: "Revoke a pending team user invitation.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "invitation_id": .object(["type": .string("string"), "description": .string("The User Invitation ID.")])
+            ]),
+            "required": .array([.string("invitation_id")])
+        ])
+    )
+    
+    public static let deleteCustomerReviewReply = Tool(
+        name: "delete_customer_review_reply",
+        description: "Delete developer reply response to a customer review.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "reply_id": .object(["type": .string("string"), "description": .string("The Customer Review Response/Reply ID.")])
+            ]),
+            "required": .array([.string("reply_id")])
+        ])
+    )
+
     public static let allTools = [
         listApps,
         getAppDetails,
@@ -588,6 +683,13 @@ public struct ToolDefinitions {
         listCertificates,
         listDevices,
         registerDevice,
-        listProvisioningProfiles
+        listProvisioningProfiles,
+        downloadSalesReports,
+        downloadFinanceReports,
+        listInAppPurchases,
+        createInAppPurchase,
+        deleteBetaGroup,
+        deleteUserInvitation,
+        deleteCustomerReviewReply
     ]
 }

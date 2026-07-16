@@ -835,4 +835,153 @@ public struct ASCClient {
         let request = APIEndpoint.v1.profiles.get()
         return try await self.provider.request(request)
     }
+
+    // MARK: - Phase 5: Reports, In-App Purchases, and Deletion
+    
+    /// Helper to decompress gzip Data using system's gunzip utility
+    private func decompressGzip(data: Data) throws -> String {
+        let fileManager = FileManager.default
+        let tempDir = fileManager.temporaryDirectory
+        let tempInputURL = tempDir.appendingPathComponent(UUID().uuidString + ".gz")
+        
+        try data.write(to: tempInputURL)
+        
+        defer {
+            try? fileManager.removeItem(at: tempInputURL)
+        }
+        
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/gunzip")
+        process.arguments = ["-c", tempInputURL.path]
+        
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        
+        try process.run()
+        process.waitUntilExit()
+        
+        let decompressedData = pipe.fileHandleForReading.readDataToEndOfFile()
+        guard let resultString = String(data: decompressedData, encoding: .utf8) else {
+            throw NSError(domain: "ASCClient", code: 500, userInfo: [NSLocalizedDescriptionKey: "Failed to decode decompressed data to UTF-8 string"])
+        }
+        
+        return resultString
+    }
+    
+    /// Download Sales and Trends Reports (and decompress automatically)
+    public func downloadSalesReports(
+        vendorNumber: String,
+        reportType: String,
+        subType: String,
+        frequency: String,
+        date: String?,
+        version: String?
+    ) async throws -> String {
+        guard let rType = AppStoreConnect_Swift_SDK.APIEndpoint.V1.SalesReports.GetParameters.FilterReportType(rawValue: reportType),
+              let rSubType = AppStoreConnect_Swift_SDK.APIEndpoint.V1.SalesReports.GetParameters.FilterReportSubType(rawValue: subType),
+              let rFreq = AppStoreConnect_Swift_SDK.APIEndpoint.V1.SalesReports.GetParameters.FilterFrequency(rawValue: frequency) else {
+            throw NSError(domain: "ASCClient", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid reportType, subType, or frequency value."])
+        }
+        
+        let parameters = AppStoreConnect_Swift_SDK.APIEndpoint.V1.SalesReports.GetParameters(
+            filterVendorNumber: [vendorNumber],
+            filterReportType: [rType],
+            filterReportSubType: [rSubType],
+            filterFrequency: [rFreq],
+            filterReportDate: date != nil ? [date!] : nil,
+            filterVersion: version != nil ? [version!] : nil
+        )
+        
+        let request = APIEndpoint.v1.salesReports.get(parameters: parameters)
+        let gzipData = try await self.provider.request(request)
+        return try decompressGzip(data: gzipData)
+    }
+    
+    /// Download Finance Reports (and decompress automatically)
+    public func downloadFinanceReports(
+        vendorNumber: String,
+        reportType: String,
+        regionCode: String,
+        date: String
+    ) async throws -> String {
+        guard let rType = AppStoreConnect_Swift_SDK.APIEndpoint.V1.FinanceReports.GetParameters.FilterReportType(rawValue: reportType) else {
+            throw NSError(domain: "ASCClient", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid reportType value."])
+        }
+        
+        let parameters = AppStoreConnect_Swift_SDK.APIEndpoint.V1.FinanceReports.GetParameters(
+            filterVendorNumber: [vendorNumber],
+            filterReportType: [rType],
+            filterRegionCode: [regionCode],
+            filterReportDate: [date]
+        )
+        
+        let request = APIEndpoint.v1.financeReports.get(parameters: parameters)
+        let gzipData = try await self.provider.request(request)
+        return try decompressGzip(data: gzipData)
+    }
+    
+    /// List In-App Purchases (V2) for a specific app
+    public func listInAppPurchases(appId: String) async throws -> AppStoreConnect_Swift_SDK.InAppPurchasesV2Response {
+        let request = APIEndpoint.v1.apps.id(appId).inAppPurchasesV2.get()
+        return try await self.provider.request(request)
+    }
+    
+    private struct InAppPurchaseCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let name: String
+                let productId: String
+                let inAppPurchaseType: String
+            }
+            struct Relationships: Encodable {
+                struct App: Encodable {
+                    struct AppData: Encodable {
+                        let type = "apps"
+                        let id: String
+                    }
+                    let data: AppData
+                }
+                let app: App
+            }
+            let type = "inAppPurchases"
+            let attributes: Attributes
+            let relationships: Relationships
+        }
+        let data: Data
+    }
+    
+    /// Create a new In-App Purchase (V2)
+    public func createInAppPurchase(appId: String, name: String, productId: String, type: String) async throws -> AppStoreConnect_Swift_SDK.InAppPurchaseV2Response {
+        let body = InAppPurchaseCreateRequestLocal(
+            data: .init(
+                attributes: .init(name: name, productId: productId, inAppPurchaseType: type),
+                relationships: .init(app: .init(data: .init(id: appId)))
+            )
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.InAppPurchaseV2Response>(
+            path: "v2/inAppPurchases",
+            method: "POST",
+            body: body,
+            id: "inAppPurchasesV2-post"
+        )
+        return try await self.provider.request(request)
+    }
+    
+    /// Delete a TestFlight Beta Group
+    public func deleteBetaGroup(betaGroupId: String) async throws {
+        let request = APIEndpoint.v1.betaGroups.id(betaGroupId).delete
+        try await self.provider.request(request)
+    }
+    
+    /// Revoke a user invitation
+    public func deleteUserInvitation(invitationId: String) async throws {
+        let request = APIEndpoint.v1.userInvitations.id(invitationId).delete
+        try await self.provider.request(request)
+    }
+    
+    /// Delete developer reply to a customer review
+    public func deleteCustomerReviewReply(replyId: String) async throws {
+        let request = APIEndpoint.v1.customerReviewResponses.id(replyId).delete
+        try await self.provider.request(request)
+    }
 }

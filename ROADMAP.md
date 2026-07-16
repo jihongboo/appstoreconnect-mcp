@@ -45,7 +45,7 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 - **Beta Groups**:
   - [x] List beta test groups for an app (Implemented: `list_beta_groups`)
   - [x] Automatically create public or internal test groups (Implemented: `create_beta_group`)
-  - [ ] Modify or delete test groups (e.g., enable Public Link invites)
+  - [x] Modify or delete test groups (e.g., enable Public Link invites) (Implemented: `delete_beta_group`)
 - **Beta Testers**:
   - [x] List all beta testers in a specific group (Implemented: `list_beta_testers`)
   - [x] Add existing testers to a group (Implemented: `add_beta_tester_to_group`)
@@ -59,7 +59,8 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 
 ### 3. In-App Purchases & Subscriptions
 - **In-App Purchases (IAP)**:
-  - [ ] Create consumable, non-consumable, and non-renewing subscription IAPs
+  - [x] List In-App Purchases (Implemented: `list_in_app_purchases`)
+  - [x] Create consumable, non-consumable, and non-renewing subscription IAPs (Implemented: `create_in_app_purchase`)
   - [ ] Modify IAP metadata and pricing schedules
   - [ ] Manage IAP localized display names and descriptions
   - [ ] Upload and manage IAP App Store review screenshots
@@ -78,7 +79,7 @@ This document lists all core capabilities supported by the Apple [App Store Conn
   - [x] Fetch reviews and ratings for a specific app (Implemented: `list_customer_reviews`)
 - **Review Replies**:
   - [x] Submit or modify developer replies to customer reviews (Implemented: `submit_customer_review_reply`)
-  - [ ] Delete published replies
+  - [x] Delete published replies (Implemented: `delete_customer_review_reply`)
 
 ---
 
@@ -89,13 +90,13 @@ This document lists all core capabilities supported by the Apple [App Store Conn
   - [ ] Restrict non-admin users to specific app visibility
 - **User Invitations**:
   - [x] Send email invitations to new team members (Implemented: `invite_team_user`)
-  - [ ] Revoke or delete pending invitations
+  - [x] Revoke or delete pending invitations (Implemented: `delete_user_invitation`)
 
 ---
 
 ### 6. Reports & Analytics
-- [ ] Download Sales and Trends Reports (CSV)
-- [ ] Download Finance Reports
+- [x] Download Sales and Trends Reports (CSV) (Implemented: `download_sales_and_trends_reports`)
+- [x] Download Finance Reports (Implemented: `download_finance_reports`)
 - [ ] Query app crash logs and statistics
 - [ ] Get power, launch time, memory, and other performance metrics
 

@@ -472,6 +472,98 @@ public struct ToolHandlers {
                     isError: false
                 )
                 
+            case "download_sales_and_trends_reports":
+                struct Args: Codable {
+                    let vendor_number: String
+                    let report_type: String
+                    let sub_type: String
+                    let frequency: String
+                    let date: String?
+                    let version: String?
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let csv = try await client.downloadSalesReports(
+                    vendorNumber: args.vendor_number,
+                    reportType: args.report_type,
+                    subType: args.sub_type,
+                    frequency: args.frequency,
+                    date: args.date,
+                    version: args.version
+                )
+                return CallTool.Result(
+                    content: [.text(text: csv, annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "download_finance_reports":
+                struct Args: Codable {
+                    let vendor_number: String
+                    let report_type: String
+                    let region_code: String
+                    let date: String
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let csv = try await client.downloadFinanceReports(
+                    vendorNumber: args.vendor_number,
+                    reportType: args.report_type,
+                    regionCode: args.region_code,
+                    date: args.date
+                )
+                return CallTool.Result(
+                    content: [.text(text: csv, annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "list_in_app_purchases":
+                struct Args: Codable { let app_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let iaps = try await client.listInAppPurchases(appId: args.app_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(iaps), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "create_in_app_purchase":
+                struct Args: Codable {
+                    let app_id: String
+                    let name: String
+                    let product_id: String
+                    let type: String
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let iap = try await client.createInAppPurchase(appId: args.app_id, name: args.name, productId: args.product_id, type: args.type)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(iap), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "delete_beta_group":
+                struct Args: Codable { let beta_group_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                try await client.deleteBetaGroup(betaGroupId: args.beta_group_id)
+                return CallTool.Result(
+                    content: [.text(text: "Successfully deleted Beta Group \(args.beta_group_id).", annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "delete_user_invitation":
+                struct Args: Codable { let invitation_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                try await client.deleteUserInvitation(invitationId: args.invitation_id)
+                return CallTool.Result(
+                    content: [.text(text: "Successfully revoked user invitation \(args.invitation_id).", annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "delete_customer_review_reply":
+                struct Args: Codable { let reply_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                try await client.deleteCustomerReviewReply(replyId: args.reply_id)
+                return CallTool.Result(
+                    content: [.text(text: "Successfully deleted customer review reply/response \(args.reply_id).", annotations: nil, _meta: nil)],
+                    isError: false
+                )
+                
             default:
                 return CallTool.Result(
                     content: [.text(text: "Unknown tool: \(name)", annotations: nil, _meta: nil)],
