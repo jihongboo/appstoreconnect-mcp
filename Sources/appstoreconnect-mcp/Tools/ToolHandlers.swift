@@ -629,6 +629,57 @@ public struct ToolHandlers {
                     isError: false
                 )
                 
+            case "list_subscription_groups":
+                struct Args: Codable { let app_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let groups = try await client.listSubscriptionGroups(appId: args.app_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(groups), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "create_subscription_group":
+                struct Args: Codable {
+                    let app_id: String
+                    let reference_name: String
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let group = try await client.createSubscriptionGroup(appId: args.app_id, referenceName: args.reference_name)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(group), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "list_subscriptions_in_group":
+                struct Args: Codable { let group_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let subscriptions = try await client.listSubscriptionsInGroup(groupId: args.group_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(subscriptions), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "create_subscription":
+                struct Args: Codable {
+                    let group_id: String
+                    let name: String
+                    let product_id: String
+                    let period: String?
+                    let group_level: Int?
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let subscription = try await client.createSubscription(
+                    groupId: args.group_id,
+                    name: args.name,
+                    productId: args.product_id,
+                    period: args.period,
+                    groupLevel: args.group_level
+                )
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(subscription), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+                
             default:
                 return CallTool.Result(
                     content: [.text(text: "Unknown tool: \(name)", annotations: nil, _meta: nil)],

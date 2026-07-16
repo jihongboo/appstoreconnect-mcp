@@ -1100,4 +1100,105 @@ public struct ASCClient {
         )
         return try await self.provider.request(request)
     }
+
+    // MARK: - Phase 7: Auto-Renewable Subscription Groups and Items
+    
+    /// List subscription groups for an app
+    public func listSubscriptionGroups(appId: String) async throws -> AppStoreConnect_Swift_SDK.SubscriptionGroupsResponse {
+        let request = APIEndpoint.v1.apps.id(appId).subscriptionGroups.get()
+        return try await self.provider.request(request)
+    }
+    
+    private struct SubscriptionGroupCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let referenceName: String
+            }
+            struct Relationships: Encodable {
+                struct App: Encodable {
+                    struct AppData: Encodable {
+                        let type = "apps"
+                        let id: String
+                    }
+                    let data: AppData
+                }
+                let app: App
+            }
+            let type = "subscriptionGroups"
+            let attributes: Attributes
+            let relationships: Relationships
+        }
+        let data: Data
+    }
+    
+    /// Create a new subscription group
+    public func createSubscriptionGroup(appId: String, referenceName: String) async throws -> AppStoreConnect_Swift_SDK.SubscriptionGroupResponse {
+        let body = SubscriptionGroupCreateRequestLocal(
+            data: .init(
+                attributes: .init(referenceName: referenceName),
+                relationships: .init(app: .init(data: .init(id: appId)))
+            )
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.SubscriptionGroupResponse>(
+            path: "v1/subscriptionGroups",
+            method: "POST",
+            body: body,
+            id: "subscriptionGroups-post"
+        )
+        return try await self.provider.request(request)
+    }
+    
+    /// List subscription items in a specific subscription group
+    public func listSubscriptionsInGroup(groupId: String) async throws -> AppStoreConnect_Swift_SDK.SubscriptionsResponse {
+        let request = APIEndpoint.v1.subscriptionGroups.id(groupId).subscriptions.get()
+        return try await self.provider.request(request)
+    }
+    
+    private struct SubscriptionCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let name: String
+                let productId: String
+                let subscriptionPeriod: String?
+                let groupLevel: Int?
+            }
+            struct Relationships: Encodable {
+                struct Group: Encodable {
+                    struct GroupData: Encodable {
+                        let type = "subscriptionGroups"
+                        let id: String
+                    }
+                    let data: GroupData
+                }
+                let group: Group
+            }
+            let type = "subscriptions"
+            let attributes: Attributes
+            let relationships: Relationships
+        }
+        let data: Data
+    }
+    
+    /// Create a new auto-renewable subscription item in a group
+    public func createSubscription(
+        groupId: String,
+        name: String,
+        productId: String,
+        period: String?,
+        groupLevel: Int?
+    ) async throws -> AppStoreConnect_Swift_SDK.SubscriptionResponse {
+        let body = SubscriptionCreateRequestLocal(
+            data: .init(
+                attributes: .init(name: name, productId: productId, subscriptionPeriod: period, groupLevel: groupLevel),
+                relationships: .init(group: .init(data: .init(id: groupId)))
+            )
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.SubscriptionResponse>(
+            path: "v1/subscriptions",
+            method: "POST",
+            body: body,
+            id: "subscriptions-post"
+        )
+        return try await self.provider.request(request)
+    }
 }

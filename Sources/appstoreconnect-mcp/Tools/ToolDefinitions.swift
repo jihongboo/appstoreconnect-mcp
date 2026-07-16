@@ -704,6 +704,61 @@ public struct ToolDefinitions {
         ])
     )
 
+
+
+    public static let listSubscriptionGroups = Tool(
+        name: "list_subscription_groups",
+        description: "List subscription groups for a specific app.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_id": .object(["type": .string("string"), "description": .string("The unique identifier (ID) of the app.")])
+            ]),
+            "required": .array([.string("app_id")])
+        ])
+    )
+    
+    public static let createSubscriptionGroup = Tool(
+        name: "create_subscription_group",
+        description: "Create a new auto-renewable subscription group for an app.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_id": .object(["type": .string("string"), "description": .string("The unique identifier (ID) of the app.")]),
+                "reference_name": .object(["type": .string("string"), "description": .string("The reference name of the subscription group.")])
+            ]),
+            "required": .array([.string("app_id"), .string("reference_name")])
+        ])
+    )
+    
+    public static let listSubscriptionsInGroup = Tool(
+        name: "list_subscriptions_in_group",
+        description: "List subscription items inside a specific subscription group.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "group_id": .object(["type": .string("string"), "description": .string("The subscription group ID.")])
+            ]),
+            "required": .array([.string("group_id")])
+        ])
+    )
+    
+    public static let createSubscription = Tool(
+        name: "create_subscription",
+        description: "Create a new auto-renewable subscription item in a group.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "group_id": .object(["type": .string("string"), "description": .string("The subscription group ID.")]),
+                "name": .object(["type": .string("string"), "description": .string("The display name of the subscription.")]),
+                "product_id": .object(["type": .string("string"), "description": .string("The unique product ID (SKU) for this subscription.")]),
+                "period": .object(["type": .string("string"), "description": .string("Period: ONE_WEEK, ONE_MONTH, TWO_MONTHS, THREE_MONTHS, SIX_MONTHS, ONE_YEAR.")]),
+                "group_level": .object(["type": .string("integer"), "description": .string("Optional group level (1 is highest, then 2, etc.)")])
+            ]),
+            "required": .array([.string("group_id"), .string("name"), .string("product_id")])
+        ])
+    )
+
     public static let allTools = [
         listApps,
         getAppDetails,
@@ -756,6 +811,10 @@ public struct ToolDefinitions {
         registerBundleId,
         listIapVersions,
         createIapLocalization,
-        updateIapLocalization
+        updateIapLocalization,
+        listSubscriptionGroups,
+        createSubscriptionGroup,
+        listSubscriptionsInGroup,
+        createSubscription
     ]
 }

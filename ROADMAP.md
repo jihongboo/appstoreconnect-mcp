@@ -65,7 +65,7 @@ This document lists all core capabilities supported by the Apple [App Store Conn
   - [x] Manage IAP localized display names and descriptions (Implemented: `list_iap_versions`, `create_iap_localization`, `update_iap_localization`)
   - [ ] Upload and manage IAP App Store review screenshots
 - **Auto-Renewable Subscriptions**:
-  - [ ] Create and manage subscription groups and subscription items
+  - [x] Create and manage subscription groups and subscription items (Implemented: `list_subscription_groups`, `create_subscription_group`, `list_subscriptions_in_group`, `create_subscription`)
   - [ ] Configure introductory offers
   - [ ] Manage promotional offer codes
   - [ ] Configure win-back offers
