@@ -61,9 +61,9 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 - **In-App Purchases (IAP)**:
   - [x] List In-App Purchases (Implemented: `list_in_app_purchases`)
   - [x] Create consumable, non-consumable, and non-renewing subscription IAPs (Implemented: `create_in_app_purchase`)
-  - [ ] Modify IAP metadata and pricing schedules
+  - [x] Modify/query IAP pricing schedules (Implemented: `get_iap_price_schedule`)
   - [x] Manage IAP localized display names and descriptions (Implemented: `list_iap_versions`, `create_iap_localization`, `update_iap_localization`)
-  - [ ] Upload and manage IAP App Store review screenshots
+  - [x] Upload and manage IAP App Store review screenshots (Implemented: `get_iap_review_screenshot`, `create_iap_review_screenshot`)
 - **Auto-Renewable Subscriptions**:
   - [x] Create and manage subscription groups and subscription items (Implemented: `list_subscription_groups`, `create_subscription_group`, `list_subscriptions_in_group`, `create_subscription`)
   - [x] Configure introductory offers (Implemented: `list_subscription_introductory_offers`)

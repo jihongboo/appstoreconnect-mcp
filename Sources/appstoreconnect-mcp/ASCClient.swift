@@ -1505,4 +1505,84 @@ public struct ASCClient {
         )
         return try await self.provider.request(request)
     }
+
+    // MARK: - Phase 12: Diagnostics, Performance Metrics, and Age Ratings
+    
+    /// Get performance and power metrics (battery, launch time, memory, hangs) for an app
+    public func getAppPerfMetrics(
+        appId: String,
+        platform: String?,
+        metricType: String?
+    ) async throws -> AppStoreConnect_Swift_SDK.XcodeMetrics {
+        var platformEnum: APIEndpoint.V1.Apps.WithID.PerfPowerMetrics.GetParameters.FilterPlatform? = nil
+        if platform?.uppercased() == "IOS" {
+            platformEnum = .ios
+        }
+        var metricTypeEnum: APIEndpoint.V1.Apps.WithID.PerfPowerMetrics.GetParameters.FilterMetricType? = nil
+        if let type = metricType?.uppercased() {
+            metricTypeEnum = APIEndpoint.V1.Apps.WithID.PerfPowerMetrics.GetParameters.FilterMetricType(rawValue: type)
+        }
+        let params = APIEndpoint.V1.Apps.WithID.PerfPowerMetrics.GetParameters(
+            filterPlatform: platformEnum.map { [$0] },
+            filterMetricType: metricTypeEnum.map { [$0] }
+        )
+        let request = APIEndpoint.v1.apps.id(appId).perfPowerMetrics.get(parameters: params)
+        return try await self.provider.request(request)
+    }
+    
+    /// Get diagnostic signatures (crash types, hang types) for a specific build
+    public func listBuildDiagnosticSignatures(
+        buildId: String,
+        diagnosticType: String?,
+        limit: Int?
+    ) async throws -> AppStoreConnect_Swift_SDK.DiagnosticSignaturesResponse {
+        var typeEnum: APIEndpoint.V1.Builds.WithID.DiagnosticSignatures.GetParameters.FilterDiagnosticType? = nil
+        if let type = diagnosticType?.uppercased() {
+            typeEnum = APIEndpoint.V1.Builds.WithID.DiagnosticSignatures.GetParameters.FilterDiagnosticType(rawValue: type)
+        }
+        let params = APIEndpoint.V1.Builds.WithID.DiagnosticSignatures.GetParameters(
+            filterDiagnosticType: typeEnum.map { [$0] },
+            limit: limit
+        )
+        let request = APIEndpoint.v1.builds.id(buildId).diagnosticSignatures.get(parameters: params)
+        return try await self.provider.request(request)
+    }
+    
+    /// Get age rating declaration details for a specific app info
+    public func getAgeRatingDeclaration(appInfoId: String) async throws -> AppStoreConnect_Swift_SDK.AgeRatingDeclarationResponse {
+        let request = APIEndpoint.v1.appInfos.id(appInfoId).ageRatingDeclaration.get()
+        return try await self.provider.request(request)
+    }
+    
+    private struct EndAppAvailabilityPreOrderCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Relationships: Encodable {
+                struct App: Encodable {
+                    struct AppData: Encodable {
+                        let type = "apps"
+                        let id: String
+                    }
+                    let data: AppData
+                }
+                let app: App
+            }
+            let type = "endAppAvailabilityPreOrders"
+            let relationships: Relationships
+        }
+        let data: Data
+    }
+    
+    /// End app pre-order state immediately and make the app available
+    public func endAppPreOrder(appId: String) async throws -> AppStoreConnect_Swift_SDK.EndAppAvailabilityPreOrderResponse {
+        let body = EndAppAvailabilityPreOrderCreateRequestLocal(
+            data: .init(relationships: .init(app: .init(data: .init(id: appId))))
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.EndAppAvailabilityPreOrderResponse>(
+            path: "v1/endAppAvailabilityPreOrders",
+            method: "POST",
+            body: body,
+            id: "endAppAvailabilityPreOrders-post"
+        )
+        return try await self.provider.request(request)
+    }
 }
