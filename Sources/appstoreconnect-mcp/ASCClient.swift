@@ -1201,4 +1201,89 @@ public struct ASCClient {
         )
         return try await self.provider.request(request)
     }
+
+    // MARK: - Phase 8: Subscription Localizations
+    
+    /// List localizations for a specific auto-renewable subscription
+    public func listSubscriptionLocalizations(subscriptionId: String) async throws -> AppStoreConnect_Swift_SDK.SubscriptionLocalizationsResponse {
+        let request = APIEndpoint.v1.subscriptions.id(subscriptionId).subscriptionLocalizations.get()
+        return try await self.provider.request(request)
+    }
+    
+    private struct SubscriptionLocalizationCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let name: String
+                let locale: String
+                let description: String?
+            }
+            struct Relationships: Encodable {
+                struct Subscription: Encodable {
+                    struct SubscriptionData: Encodable {
+                        let type = "subscriptions"
+                        let id: String
+                    }
+                    let data: SubscriptionData
+                }
+                let subscription: Subscription
+            }
+            let type = "subscriptionLocalizations"
+            let attributes: Attributes
+            let relationships: Relationships
+        }
+        let data: Data
+    }
+    
+    /// Create a localization description for a subscription item
+    public func createSubscriptionLocalization(
+        subscriptionId: String,
+        name: String,
+        locale: String,
+        description: String?
+    ) async throws -> AppStoreConnect_Swift_SDK.SubscriptionLocalizationResponse {
+        let body = SubscriptionLocalizationCreateRequestLocal(
+            data: .init(
+                attributes: .init(name: name, locale: locale, description: description),
+                relationships: .init(subscription: .init(data: .init(id: subscriptionId)))
+            )
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.SubscriptionLocalizationResponse>(
+            path: "v1/subscriptionLocalizations",
+            method: "POST",
+            body: body,
+            id: "subscriptionLocalizations-post"
+        )
+        return try await self.provider.request(request)
+    }
+    
+    private struct SubscriptionLocalizationUpdateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let name: String?
+                let description: String?
+            }
+            let type = "subscriptionLocalizations"
+            let id: String
+            let attributes: Attributes
+        }
+        let data: Data
+    }
+    
+    /// Update an existing subscription localization
+    public func updateSubscriptionLocalization(
+        localizationId: String,
+        name: String?,
+        description: String?
+    ) async throws -> AppStoreConnect_Swift_SDK.SubscriptionLocalizationResponse {
+        let body = SubscriptionLocalizationUpdateRequestLocal(
+            data: .init(id: localizationId, attributes: .init(name: name, description: description))
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.SubscriptionLocalizationResponse>(
+            path: "v1/subscriptionLocalizations/\(localizationId)",
+            method: "PATCH",
+            body: body,
+            id: "subscriptionLocalizations-patch"
+        )
+        return try await self.provider.request(request)
+    }
 }

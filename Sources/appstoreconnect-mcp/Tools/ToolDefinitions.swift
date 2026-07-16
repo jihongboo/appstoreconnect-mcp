@@ -759,6 +759,47 @@ public struct ToolDefinitions {
         ])
     )
 
+    public static let listSubscriptionLocalizations = Tool(
+        name: "list_subscription_localizations",
+        description: "List localization metadata for a specific auto-renewable subscription.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "subscription_id": .object(["type": .string("string"), "description": .string("The subscription item ID.")])
+            ]),
+            "required": .array([.string("subscription_id")])
+        ])
+    )
+    
+    public static let createSubscriptionLocalization = Tool(
+        name: "create_subscription_localization",
+        description: "Create localization metadata for a subscription item.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "subscription_id": .object(["type": .string("string"), "description": .string("The subscription item ID.")]),
+                "name": .object(["type": .string("string"), "description": .string("The display name of the subscription product.")]),
+                "locale": .object(["type": .string("string"), "description": .string("The locale code, e.g. en-US.")]),
+                "description": .object(["type": .string("string"), "description": .string("Optional description for the subscription product.")])
+            ]),
+            "required": .array([.string("subscription_id"), .string("name"), .string("locale")])
+        ])
+    )
+    
+    public static let updateSubscriptionLocalization = Tool(
+        name: "update_subscription_localization",
+        description: "Update localization metadata for an existing subscription localization.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "localization_id": .object(["type": .string("string"), "description": .string("The subscription localization ID.")]),
+                "name": .object(["type": .string("string"), "description": .string("Optional new display name.")]),
+                "description": .object(["type": .string("string"), "description": .string("Optional new description.")])
+            ]),
+            "required": .array([.string("localization_id")])
+        ])
+    )
+
     public static let allTools = [
         listApps,
         getAppDetails,
@@ -815,6 +856,9 @@ public struct ToolDefinitions {
         listSubscriptionGroups,
         createSubscriptionGroup,
         listSubscriptionsInGroup,
-        createSubscription
+        createSubscription,
+        listSubscriptionLocalizations,
+        createSubscriptionLocalization,
+        updateSubscriptionLocalization
     ]
 }

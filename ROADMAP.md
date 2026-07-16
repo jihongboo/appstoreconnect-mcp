@@ -69,6 +69,7 @@ This document lists all core capabilities supported by the Apple [App Store Conn
   - [ ] Configure introductory offers
   - [ ] Manage promotional offer codes
   - [ ] Configure win-back offers
+  - [x] Manage subscription localizations (Implemented: `list_subscription_localizations`, `create_subscription_localization`, `update_subscription_localization`)
 
 ---
 

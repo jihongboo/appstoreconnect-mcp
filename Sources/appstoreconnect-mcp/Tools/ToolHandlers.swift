@@ -680,6 +680,51 @@ public struct ToolHandlers {
                     isError: false
                 )
                 
+            case "list_subscription_localizations":
+                struct Args: Codable { let subscription_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let localizations = try await client.listSubscriptionLocalizations(subscriptionId: args.subscription_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(localizations), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "create_subscription_localization":
+                struct Args: Codable {
+                    let subscription_id: String
+                    let name: String
+                    let locale: String
+                    let description: String?
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let localization = try await client.createSubscriptionLocalization(
+                    subscriptionId: args.subscription_id,
+                    name: args.name,
+                    locale: args.locale,
+                    description: args.description
+                )
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(localization), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "update_subscription_localization":
+                struct Args: Codable {
+                    let localization_id: String
+                    let name: String?
+                    let description: String?
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let localization = try await client.updateSubscriptionLocalization(
+                    localizationId: args.localization_id,
+                    name: args.name,
+                    description: args.description
+                )
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(localization), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+                
             default:
                 return CallTool.Result(
                     content: [.text(text: "Unknown tool: \(name)", annotations: nil, _meta: nil)],
