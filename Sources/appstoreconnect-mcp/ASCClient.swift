@@ -1444,4 +1444,65 @@ public struct ASCClient {
         let request = APIEndpoint.v1.subscriptions.id(subscriptionId).promotionalOffers.get()
         return try await self.provider.request(request)
     }
+
+    // MARK: - Phase 11: In-App Purchase Price Schedules and Review Screenshots
+    
+    /// Get In-App Purchase Price Schedule (Pricing and Territories)
+    public func getIapPriceSchedule(iapId: String) async throws -> AppStoreConnect_Swift_SDK.InAppPurchasePriceScheduleResponse {
+        let params = APIEndpoint.V2.InAppPurchases.WithID.IapPriceSchedule.GetParameters(
+            include: [.manualPrices, .baseTerritory]
+        )
+        let request = APIEndpoint.v2.inAppPurchases.id(iapId).iapPriceSchedule.get(parameters: params)
+        return try await self.provider.request(request)
+    }
+    
+    /// Get App Store Review Screenshot for an In-App Purchase
+    public func getIapReviewScreenshot(iapId: String) async throws -> AppStoreConnect_Swift_SDK.InAppPurchaseAppStoreReviewScreenshotResponse {
+        let request = APIEndpoint.v2.inAppPurchases.id(iapId).appStoreReviewScreenshot.get()
+        return try await self.provider.request(request)
+    }
+    
+    private struct InAppPurchaseAppStoreReviewScreenshotCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let fileSize: Int
+                let fileName: String
+            }
+            struct Relationships: Encodable {
+                struct InAppPurchaseV2: Encodable {
+                    struct InAppPurchaseData: Encodable {
+                        let type = "inAppPurchases"
+                        let id: String
+                    }
+                    let data: InAppPurchaseData
+                }
+                let inAppPurchaseV2: InAppPurchaseV2
+            }
+            let type = "inAppPurchaseAppStoreReviewScreenshots"
+            let attributes: Attributes
+            let relationships: Relationships
+        }
+        let data: Data
+    }
+    
+    /// Create an App Store Review Screenshot record for an In-App Purchase
+    public func createIapReviewScreenshot(
+        iapId: String,
+        fileName: String,
+        fileSize: Int
+    ) async throws -> AppStoreConnect_Swift_SDK.InAppPurchaseAppStoreReviewScreenshotResponse {
+        let body = InAppPurchaseAppStoreReviewScreenshotCreateRequestLocal(
+            data: .init(
+                attributes: .init(fileSize: fileSize, fileName: fileName),
+                relationships: .init(inAppPurchaseV2: .init(data: .init(id: iapId)))
+            )
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.InAppPurchaseAppStoreReviewScreenshotResponse>(
+            path: "v1/inAppPurchaseAppStoreReviewScreenshots",
+            method: "POST",
+            body: body,
+            id: "inAppPurchaseAppStoreReviewScreenshots-post"
+        )
+        return try await self.provider.request(request)
+    }
 }

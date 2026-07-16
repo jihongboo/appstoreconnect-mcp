@@ -825,6 +825,41 @@ public struct ToolHandlers {
                     isError: false
                 )
                 
+            case "get_iap_price_schedule":
+                struct Args: Codable { let iap_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let schedule = try await client.getIapPriceSchedule(iapId: args.iap_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(schedule), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "get_iap_review_screenshot":
+                struct Args: Codable { let iap_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let screenshot = try await client.getIapReviewScreenshot(iapId: args.iap_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(screenshot), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "create_iap_review_screenshot":
+                struct Args: Codable {
+                    let iap_id: String
+                    let file_name: String
+                    let file_size: Int
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let screenshot = try await client.createIapReviewScreenshot(
+                    iapId: args.iap_id,
+                    fileName: args.file_name,
+                    fileSize: args.file_size
+                )
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(screenshot), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+                
             default:
                 return CallTool.Result(
                     content: [.text(text: "Unknown tool: \(name)", annotations: nil, _meta: nil)],

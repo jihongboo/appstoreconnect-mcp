@@ -914,6 +914,44 @@ public struct ToolDefinitions {
         ])
     )
 
+    public static let getIapPriceSchedule = Tool(
+        name: "get_iap_price_schedule",
+        description: "Get pricing points and availability schedule for a specific In-App Purchase.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "iap_id": .object(["type": .string("string"), "description": .string("The In-App Purchase unique ID.")])
+            ]),
+            "required": .array([.string("iap_id")])
+        ])
+    )
+    
+    public static let getIapReviewScreenshot = Tool(
+        name: "get_iap_review_screenshot",
+        description: "Get App Store Review Screenshot status for a specific In-App Purchase.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "iap_id": .object(["type": .string("string"), "description": .string("The In-App Purchase unique ID.")])
+            ]),
+            "required": .array([.string("iap_id")])
+        ])
+    )
+    
+    public static let createIapReviewScreenshot = Tool(
+        name: "create_iap_review_screenshot",
+        description: "Create an App Store Review Screenshot record for an In-App Purchase.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "iap_id": .object(["type": .string("string"), "description": .string("The In-App Purchase unique ID.")]),
+                "file_name": .object(["type": .string("string"), "description": .string("The file name, e.g. screenshot.png.")]),
+                "file_size": .object(["type": .string("integer"), "description": .string("The file size in bytes.")])
+            ]),
+            "required": .array([.string("iap_id"), .string("file_name"), .string("file_size")])
+        ])
+    )
+
     public static let allTools = [
         listApps,
         getAppDetails,
@@ -982,6 +1020,9 @@ public struct ToolDefinitions {
         createVersionExperiment,
         getAppRatingSummary,
         listSubscriptionIntroductoryOffers,
-        listSubscriptionPromotionalOffers
+        listSubscriptionPromotionalOffers,
+        getIapPriceSchedule,
+        getIapReviewScreenshot,
+        createIapReviewScreenshot
     ]
 }
