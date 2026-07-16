@@ -877,6 +877,43 @@ public struct ToolDefinitions {
         ])
     )
 
+    public static let getAppRatingSummary = Tool(
+        name: "get_app_rating_summary",
+        description: "Get aggregate customer reviews and ratings summarization for an app.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_id": .object(["type": .string("string"), "description": .string("The unique ID of the app.")]),
+                "platform": .object(["type": .string("string"), "description": .string("Optional filter platform: IOS, MAC_OS, TV_OS, VISION_OS. Default is IOS.")])
+            ]),
+            "required": .array([.string("app_id")])
+        ])
+    )
+    
+    public static let listSubscriptionIntroductoryOffers = Tool(
+        name: "list_subscription_introductory_offers",
+        description: "List introductory offers for a specific auto-renewable subscription product.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "subscription_id": .object(["type": .string("string"), "description": .string("The subscription item ID.")])
+            ]),
+            "required": .array([.string("subscription_id")])
+        ])
+    )
+    
+    public static let listSubscriptionPromotionalOffers = Tool(
+        name: "list_subscription_promotional_offers",
+        description: "List promotional offers (offer codes) for a specific auto-renewable subscription product.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "subscription_id": .object(["type": .string("string"), "description": .string("The subscription item ID.")])
+            ]),
+            "required": .array([.string("subscription_id")])
+        ])
+    )
+
     public static let allTools = [
         listApps,
         getAppDetails,
@@ -942,6 +979,9 @@ public struct ToolDefinitions {
         listCustomProductPages,
         createCustomProductPage,
         listVersionExperiments,
-        createVersionExperiment
+        createVersionExperiment,
+        getAppRatingSummary,
+        listSubscriptionIntroductoryOffers,
+        listSubscriptionPromotionalOffers
     ]
 }

@@ -66,8 +66,8 @@ This document lists all core capabilities supported by the Apple [App Store Conn
   - [ ] Upload and manage IAP App Store review screenshots
 - **Auto-Renewable Subscriptions**:
   - [x] Create and manage subscription groups and subscription items (Implemented: `list_subscription_groups`, `create_subscription_group`, `list_subscriptions_in_group`, `create_subscription`)
-  - [ ] Configure introductory offers
-  - [ ] Manage promotional offer codes
+  - [x] Configure introductory offers (Implemented: `list_subscription_introductory_offers`)
+  - [x] Manage promotional offer codes (Implemented: `list_subscription_promotional_offers`)
   - [ ] Configure win-back offers
   - [x] Manage subscription localizations (Implemented: `list_subscription_localizations`, `create_subscription_localization`, `update_subscription_localization`)
 
@@ -75,7 +75,7 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 
 ### 4. Ratings & Customer Reviews
 - **Ratings**:
-  - [ ] Get aggregate rating statistics for an app
+  - [x] Get aggregate rating statistics for an app (Implemented: `get_app_rating_summary`)
 - **Customer Reviews**:
   - [x] Fetch reviews and ratings for a specific app (Implemented: `list_customer_reviews`)
 - **Review Replies**:

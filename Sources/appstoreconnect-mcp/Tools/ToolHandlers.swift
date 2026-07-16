@@ -795,6 +795,36 @@ public struct ToolHandlers {
                     isError: false
                 )
                 
+            case "get_app_rating_summary":
+                struct Args: Codable {
+                    let app_id: String
+                    let platform: String?
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let summary = try await client.getAppRatingSummary(appId: args.app_id, platform: args.platform)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(summary), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "list_subscription_introductory_offers":
+                struct Args: Codable { let subscription_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let offers = try await client.listSubscriptionIntroductoryOffers(subscriptionId: args.subscription_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(offers), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "list_subscription_promotional_offers":
+                struct Args: Codable { let subscription_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let offers = try await client.listSubscriptionPromotionalOffers(subscriptionId: args.subscription_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(offers), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+                
             default:
                 return CallTool.Result(
                     content: [.text(text: "Unknown tool: \(name)", annotations: nil, _meta: nil)],

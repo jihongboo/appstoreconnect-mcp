@@ -1412,4 +1412,36 @@ public struct ASCClient {
         )
         return try await self.provider.request(request)
     }
+
+    // MARK: - Phase 10: App Rating Summarizations, Subscription Introductory Offers, and Promotional Offers
+    
+    /// Get customer review summarization (aggregate rating stats) for an app
+    public func getAppRatingSummary(appId: String, platform: String?) async throws -> AppStoreConnect_Swift_SDK.CustomerReviewSummarizationsResponse {
+        let platformEnum: APIEndpoint.V1.Apps.WithID.CustomerReviewSummarizations.GetParameters.FilterPlatform
+        switch platform?.uppercased() {
+        case "MAC_OS":
+            platformEnum = .macOs
+        case "TV_OS":
+            platformEnum = .tvOs
+        case "VISION_OS":
+            platformEnum = .visionOs
+        default:
+            platformEnum = .ios
+        }
+        let params = APIEndpoint.V1.Apps.WithID.CustomerReviewSummarizations.GetParameters(filterPlatform: [platformEnum])
+        let request = APIEndpoint.v1.apps.id(appId).customerReviewSummarizations.get(parameters: params)
+        return try await self.provider.request(request)
+    }
+    
+    /// List introductory offers for a specific auto-renewable subscription
+    public func listSubscriptionIntroductoryOffers(subscriptionId: String) async throws -> AppStoreConnect_Swift_SDK.SubscriptionIntroductoryOffersResponse {
+        let request = APIEndpoint.v1.subscriptions.id(subscriptionId).introductoryOffers.get()
+        return try await self.provider.request(request)
+    }
+    
+    /// List promotional offers for a specific auto-renewable subscription
+    public func listSubscriptionPromotionalOffers(subscriptionId: String) async throws -> AppStoreConnect_Swift_SDK.SubscriptionPromotionalOffersResponse {
+        let request = APIEndpoint.v1.subscriptions.id(subscriptionId).promotionalOffers.get()
+        return try await self.provider.request(request)
+    }
 }
