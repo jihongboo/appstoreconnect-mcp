@@ -1,44 +1,38 @@
 import Foundation
-import AppStoreConnect_Swift_SDK
+@preconcurrency import AppStoreConnect_Swift_SDK
 
 public struct ASCClient {
     private let credentials: Credentials
+    private let provider: APIProvider
 
     public init(credentials: Credentials) throws {
         self.credentials = credentials
-    }
-
-    private func makeProvider() throws -> APIProvider {
-        let configuration = try credentials.makeConfiguration()
-        return APIProvider(configuration: configuration)
+        self.provider = try APIProvider(configuration: credentials.makeConfiguration())
     }
 
     /// List Apps in App Store Connect
     public func listApps(limit: Int?) async throws -> [App] {
-        let provider = try makeProvider()
         let limitVal = limit ?? 10
         let request = APIEndpoint.v1.apps.get(parameters: .init(limit: limitVal))
-        let response = try await provider.request(request)
+        let response = try await self.provider.request(request)
         return response.data
     }
 
     /// Get App details
     public func getAppDetails(appId: String) async throws -> App {
-        let provider = try makeProvider()
         let request = APIEndpoint.v1.apps.id(appId).get()
-        let response = try await provider.request(request)
+        let response = try await self.provider.request(request)
         return response.data
     }
 
     /// List Builds, optionally filtered by appId (filtered in memory due to SDK parameters constraint)
     public func listBuilds(appId: String?, limit: Int?) async throws -> [Build] {
-        let provider = try makeProvider()
         let limitVal = limit ?? 10
         let request = APIEndpoint.v1.builds.get(parameters: .init(
             filterID: nil,
             limit: limitVal
         ))
-        let response = try await provider.request(request)
+        let response = try await self.provider.request(request)
         if let appId = appId {
             return response.data.filter { build in
                 build.relationships?.app?.data?.id == appId
@@ -49,23 +43,21 @@ public struct ASCClient {
 
     /// List all App Store Versions for a specific app
     public func listAppStoreVersions(appId: String, limit: Int?) async throws -> [AppStoreVersion] {
-        let provider = try makeProvider()
         let limitVal = limit ?? 10
         let request = APIEndpoint.v1.apps.id(appId).appStoreVersions.get(parameters: .init(
             limit: limitVal
         ))
-        let response = try await provider.request(request)
+        let response = try await self.provider.request(request)
         return response.data
     }
 
     /// Get the latest build for a specific app (sorted by uploadedDate descending)
     public func getLatestBuildInfo(appId: String) async throws -> Build? {
-        let provider = try makeProvider()
         let request = APIEndpoint.v1.builds.get(parameters: .init(
             filterID: nil,
             limit: 100 // fetch a reasonable amount to find the latest
         ))
-        let response = try await provider.request(request)
+        let response = try await self.provider.request(request)
         
         let appBuilds = response.data.filter { build in
             build.relationships?.app?.data?.id == appId
@@ -81,7 +73,6 @@ public struct ASCClient {
 
     /// Create a new App Store Version
     public func createAppStoreVersion(appId: String, versionString: String, platform: Platform) async throws -> AppStoreVersion {
-        let provider = try makeProvider()
         let appData = AppStoreVersionCreateRequest.Data.Relationships.App.Data(
             type: .apps,
             id: appId
@@ -99,15 +90,14 @@ public struct ASCClient {
             relationships: relationships
         )
         let request = APIEndpoint.v1.appStoreVersions.post(.init(data: data))
-        let response = try await provider.request(request)
+        let response = try await self.provider.request(request)
         return response.data
     }
 
     /// List all localizations for a specific app store version
     public func listAppStoreVersionLocalizations(versionId: String) async throws -> [AppStoreVersionLocalization] {
-        let provider = try makeProvider()
         let request = APIEndpoint.v1.appStoreVersions.id(versionId).appStoreVersionLocalizations.get()
-        let response = try await provider.request(request)
+        let response = try await self.provider.request(request)
         return response.data
     }
 
@@ -118,7 +108,6 @@ public struct ASCClient {
         description: String?,
         keywords: String?
     ) async throws -> AppStoreVersionLocalization {
-        let provider = try makeProvider()
         let attributes = AppStoreVersionLocalizationUpdateRequest.Data.Attributes(
             description: description,
             keywords: keywords,
@@ -130,7 +119,7 @@ public struct ASCClient {
             attributes: attributes
         )
         let request = APIEndpoint.v1.appStoreVersionLocalizations.id(localizationId).patch(.init(data: data))
-        let response = try await provider.request(request)
+        let response = try await self.provider.request(request)
         return response.data
     }
 
@@ -149,16 +138,14 @@ public struct ASCClient {
 
     /// List App Infos for a specific app
     public func listAppInfos(appId: String) async throws -> AppStoreConnect_Swift_SDK.AppInfosResponse {
-        let provider = try makeProvider()
         let request = APIEndpoint.v1.apps.id(appId).appInfos.get()
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
 
     /// List App Info Localizations for a specific App Info
     public func listAppInfoLocalizations(appInfoId: String) async throws -> AppStoreConnect_Swift_SDK.AppInfoLocalizationsResponse {
-        let provider = try makeProvider()
         let request = APIEndpoint.v1.appInfos.id(appInfoId).appInfoLocalizations.get()
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
 
     /// Update App Info Localization (subtitle, privacyPolicyUrl)
@@ -167,7 +154,6 @@ public struct ASCClient {
         subtitle: String?,
         privacyPolicyUrl: String?
     ) async throws -> AppStoreConnect_Swift_SDK.AppInfoLocalizationResponse {
-        let provider = try makeProvider()
         let body = SubtitleUpdateRequest(
             data: .init(
                 id: localizationId,
@@ -180,16 +166,15 @@ public struct ASCClient {
             body: body,
             id: "appInfoLocalizations-patch"
         )
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
 
     // MARK: - App Category & Info Update
     
     /// List all app categories available on App Store Connect
     public func listAppCategories() async throws -> AppStoreConnect_Swift_SDK.AppCategoriesResponse {
-        let provider = try makeProvider()
         let request = APIEndpoint.v1.appCategories.get()
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
     
     private struct AppInfoUpdateRequest: Encodable {
@@ -213,7 +198,6 @@ public struct ASCClient {
     
     /// Update App Info (primary category)
     public func updateAppInfo(appInfoId: String, primaryCategoryId: String) async throws -> AppStoreConnect_Swift_SDK.AppInfoResponse {
-        let provider = try makeProvider()
         let body = AppInfoUpdateRequest(
             data: .init(
                 id: appInfoId,
@@ -226,16 +210,15 @@ public struct ASCClient {
             body: body,
             id: "appInfos-patch"
         )
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
 
     // MARK: - TestFlight Beta Management
     
     /// List Beta Groups for a specific app
     public func listBetaGroups(appId: String) async throws -> AppStoreConnect_Swift_SDK.BetaGroupsWithoutIncludesResponse {
-        let provider = try makeProvider()
         let request = APIEndpoint.v1.apps.id(appId).betaGroups.get()
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
     
     private struct BetaGroupCreateRequest: Encodable {
@@ -262,7 +245,6 @@ public struct ASCClient {
     
     /// Create a new Beta Group
     public func createBetaGroup(appId: String, name: String) async throws -> AppStoreConnect_Swift_SDK.BetaGroupResponse {
-        let provider = try makeProvider()
         let body = BetaGroupCreateRequest(
             data: .init(
                 attributes: .init(name: name),
@@ -275,14 +257,13 @@ public struct ASCClient {
             body: body,
             id: "betaGroups-post"
         )
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
     
     /// List Beta Testers in a Beta Group
     public func listBetaTesters(betaGroupId: String) async throws -> AppStoreConnect_Swift_SDK.BetaTestersWithoutIncludesResponse {
-        let provider = try makeProvider()
         let request = APIEndpoint.v1.betaGroups.id(betaGroupId).betaTesters.get()
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
     
     private struct BetaTesterGroupLinkageRequest: Encodable {
@@ -295,7 +276,6 @@ public struct ASCClient {
     
     /// Add an existing Beta Tester to a Beta Group
     public func addBetaTesterToGroup(betaGroupId: String, betaTesterId: String) async throws {
-        let provider = try makeProvider()
         let body = BetaTesterGroupLinkageRequest(data: [.init(id: betaTesterId)])
         let request = Request<Void>(
             path: "v1/betaGroups/\(betaGroupId)/relationships/betaTesters",
@@ -303,17 +283,16 @@ public struct ASCClient {
             body: body,
             id: "betaGroups-betaTesters-link"
         )
-        try await provider.request(request)
+        try await self.provider.request(request)
     }
 
     // MARK: - Customer Reviews
     
     /// List customer reviews for a specific app
     public func listCustomerReviews(appId: String, limit: Int?) async throws -> AppStoreConnect_Swift_SDK.CustomerReviewsResponse {
-        let provider = try makeProvider()
         let limitVal = limit ?? 10
         let request = APIEndpoint.v1.apps.id(appId).customerReviews.get(parameters: .init(limit: limitVal))
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
     
     private struct ReviewReplyRequest: Encodable {
@@ -340,7 +319,6 @@ public struct ASCClient {
     
     /// Submit or update reply to a customer review
     public func submitCustomerReviewReply(reviewId: String, body: String) async throws -> AppStoreConnect_Swift_SDK.CustomerReviewResponseV1Response {
-        let provider = try makeProvider()
         let requestBody = ReviewReplyRequest(
             data: .init(
                 attributes: .init(responseBody: body),
@@ -353,16 +331,15 @@ public struct ASCClient {
             body: requestBody,
             id: "customerReviewReplies-post"
         )
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
 
     // MARK: - Users & Team Management
     
     /// List users of the developer account
     public func listUsers() async throws -> AppStoreConnect_Swift_SDK.UsersResponse {
-        let provider = try makeProvider()
         let request = APIEndpoint.v1.users.get()
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
 
     // MARK: - Phase 1: Submissions, Phased Releases, Pricing & Availabilities
@@ -387,7 +364,6 @@ public struct ASCClient {
     
     /// Submit App Store Version for review
     public func submitAppStoreVersion(versionId: String) async throws {
-        let provider = try makeProvider()
         let body = VersionSubmissionRequest(
             data: .init(relationships: .init(appStoreVersion: .init(data: .init(id: versionId))))
         )
@@ -397,7 +373,7 @@ public struct ASCClient {
             body: body,
             id: "appStoreVersionSubmissions-post"
         )
-        try await provider.request(request)
+        try await self.provider.request(request)
     }
     
     private struct PhasedReleaseCreateRequest: Encodable {
@@ -436,7 +412,6 @@ public struct ASCClient {
     
     /// Manage Phased Release for an App Store Version (create, pause, resume, complete)
     public func managePhasedRelease(versionId: String, action: String) async throws -> AppStoreConnect_Swift_SDK.AppStoreVersionPhasedReleaseResponse {
-        let provider = try makeProvider()
         
         if action == "create" {
             let body = PhasedReleaseCreateRequest(
@@ -451,14 +426,12 @@ public struct ASCClient {
                 body: body,
                 id: "phasedReleases-post"
             )
-            return try await provider.request(request)
+            return try await self.provider.request(request)
         } else {
             // First find the phased release for this version to get the ID
             let findRequest = APIEndpoint.v1.appStoreVersions.id(versionId).appStoreVersionPhasedRelease.get()
-            let findResponse = try await provider.request(findRequest)
-            guard let phasedReleaseId = findResponse.data?.id else {
-                throw NSError(domain: "ASCClient", code: 404, userInfo: [NSLocalizedDescriptionKey: "No phased release found for version \(versionId)"])
-            }
+            let findResponse = try await self.provider.request(findRequest)
+            let phasedReleaseId = findResponse.data.id
             
             let state: String
             if action == "pause" {
@@ -483,22 +456,20 @@ public struct ASCClient {
                 body: body,
                 id: "phasedReleases-patch"
             )
-            return try await provider.request(request)
+            return try await self.provider.request(request)
         }
     }
     
     /// Get Price Points for an App
     public func listAppPricePoints(appId: String) async throws -> AppStoreConnect_Swift_SDK.AppPricePointsV3Response {
-        let provider = try makeProvider()
         let request = APIEndpoint.v1.apps.id(appId).appPricePoints.get()
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
     
     /// Get current availability/territories for an App (v2)
     public func getAppAvailability(appId: String) async throws -> AppStoreConnect_Swift_SDK.AppAvailabilityV2Response {
-        let provider = try makeProvider()
         let request = APIEndpoint.v1.apps.id(appId).appAvailabilityV2.get()
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
     
     private struct AppAvailabilityCreateRequest: Encodable {
@@ -533,7 +504,6 @@ public struct ASCClient {
     
     /// Set app availability globally or for specific territories (v2)
     public func setAppAvailability(appId: String, availableInNewTerritories: Bool, territoryIds: [String]) async throws -> AppStoreConnect_Swift_SDK.AppAvailabilityV2Response {
-        let provider = try makeProvider()
         let territories = territoryIds.map { AppAvailabilityCreateRequest.Data.Relationships.TerritoryData(id: $0) }
         let body = AppAvailabilityCreateRequest(
             data: .init(
@@ -550,6 +520,6 @@ public struct ASCClient {
             body: body,
             id: "appAvailabilities-post"
         )
-        return try await provider.request(request)
+        return try await self.provider.request(request)
     }
 }

@@ -26,13 +26,13 @@ if CommandLine.arguments.contains("--test") {
     let missingKey = (env["APP_STORE_CONNECT_PRIVATE_KEY"]?.isEmpty ?? true) && (env["APP_STORE_CONNECT_PRIVATE_KEY_PATH"]?.isEmpty ?? true)
     
     if missingIssuer || missingKeyID || missingKey {
-        logToStderr("提示：未检测到预配置的系统环境变量，我们将通过交互式输入来引导您进行测试。")
-        logToStderr("（注意：这些输入仅在本次测试运行中有效，不会修改您的系统环境变量）")
+        logToStderr("Tip: No pre-configured environment variables detected. We'll guide you through interactive input for testing.")
+        logToStderr("(Note: These inputs are only valid for this test run and will NOT modify your system environment variables)")
         logToStderr("---------------------------------------------------------")
         
         var inputIssuer = ""
         while inputIssuer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            logToStderr("1. 请输入 APP_STORE_CONNECT_ISSUER_ID (UUID格式):")
+            logToStderr("1. Enter APP_STORE_CONNECT_ISSUER_ID (UUID format):")
             logToStderr("> ", terminator: "")
             inputIssuer = readLine() ?? ""
         }
@@ -40,15 +40,15 @@ if CommandLine.arguments.contains("--test") {
         
         var inputKeyID = ""
         while inputKeyID.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            logToStderr("\n2. 请输入 APP_STORE_CONNECT_PRIVATE_KEY_ID (10位Key ID):")
+            logToStderr("\n2. Enter APP_STORE_CONNECT_PRIVATE_KEY_ID (10-character Key ID):")
             logToStderr("> ", terminator: "")
             inputKeyID = readLine() ?? ""
         }
         setenv("APP_STORE_CONNECT_PRIVATE_KEY_ID", inputKeyID.trimmingCharacters(in: .whitespacesAndNewlines), 1)
         
-        logToStderr("\n3. 请输入私钥：")
-        logToStderr("   - 如果使用私钥文件，直接输入 .p8 文件的绝对路径（如 /Users/xx/AuthKey_xx.p8）")
-        logToStderr("   - 如果是复制私钥内容，请粘贴并在最后【新起一行输入 END】结束：")
+        logToStderr("\n3. Enter the private key:")
+        logToStderr("   - If using a key file, enter the absolute path to the .p8 file (e.g. /Users/xx/AuthKey_xx.p8)")
+        logToStderr("   - If pasting the key content, paste it and type END on a new line to finish:")
         logToStderr("> ", terminator: "")
         
         if let firstLine = readLine() {
@@ -75,10 +75,9 @@ if CommandLine.arguments.contains("--test") {
         logToStderr("---------------------------------------------------------")
     }
     
-    logToStderr("开始执行诊断测试...\n")
+    logToStderr("Starting diagnostic tests...\n")
     
-    Task {
-        do {
+    do {
             // 1. Test Credentials loading
             logToStderr("[1/4] Testing Credentials loading...")
             let credentials = try Credentials.loadFromEnvironment()
@@ -127,10 +126,6 @@ if CommandLine.arguments.contains("--test") {
             logToStderr("=========================================================")
             exit(1)
         }
-    }
-    
-    // Wait for diagnostic tests to finish (since they run asynchronously)
-    RunLoop.current.run()
 }
 
 // -------------------------------------------------------------
@@ -150,13 +145,13 @@ let server = Server(
 
 // 2. Register handler for ListTools
 await server.withMethodHandler(ListTools.self) { _ in
-    logToStderr("Received listTools request")
-    return ListTools.Result(tools: ToolDefinitions.allTools)
+    await logToStderr("Received listTools request")
+    return await ListTools.Result(tools: ToolDefinitions.allTools)
 }
 
 // 3. Register handler for CallTool
 await server.withMethodHandler(CallTool.self) { params in
-    logToStderr("Received callTool request for: \(params.name)")
+    await logToStderr("Received callTool request for: \(params.name)")
     return await ToolHandlers.handleCallTool(name: params.name, arguments: params.arguments)
 }
 

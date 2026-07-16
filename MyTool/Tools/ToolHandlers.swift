@@ -19,7 +19,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let apps = try await client.listApps(limit: args.limit)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(apps))],
+                    content: [.text(text: JSONUtils.prettyPrint(apps), annotations: nil, _meta: nil)],
                     isError: false
                 )
                 
@@ -28,7 +28,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let app = try await client.getAppDetails(appId: args.app_id)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(app))],
+                    content: [.text(text: JSONUtils.prettyPrint(app), annotations: nil, _meta: nil)],
                     isError: false
                 )
                 
@@ -40,7 +40,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let builds = try await client.listBuilds(appId: args.app_id, limit: args.limit)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(builds))],
+                    content: [.text(text: JSONUtils.prettyPrint(builds), annotations: nil, _meta: nil)],
                     isError: false
                 )
                 
@@ -52,7 +52,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let versions = try await client.listAppStoreVersions(appId: args.app_id, limit: args.limit)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(versions))],
+                    content: [.text(text: JSONUtils.prettyPrint(versions), annotations: nil, _meta: nil)],
                     isError: false
                 )
                 
@@ -61,12 +61,12 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 if let build = try await client.getLatestBuildInfo(appId: args.app_id) {
                     return CallTool.Result(
-                        content: [.text(JSONUtils.prettyPrint(build))],
+                        content: [.text(text: JSONUtils.prettyPrint(build), annotations: nil, _meta: nil)],
                         isError: false
                     )
                 } else {
                     return CallTool.Result(
-                        content: [.text("No builds found for app \(args.app_id)")],
+                        content: [.text(text: "No builds found for app \(args.app_id)", annotations: nil, _meta: nil)],
                         isError: false
                     )
                 }
@@ -89,7 +89,7 @@ public struct ToolHandlers {
                 case "visionos": platform = .visionOs
                 default:
                     return CallTool.Result(
-                        content: [.text("Invalid platform: \(args.platform). Must be one of: ios, macOs, tvOs, visionOs")],
+                        content: [.text(text: "Invalid platform: \(args.platform). Must be one of: ios, macOs, tvOs, visionOs", annotations: nil, _meta: nil)],
                         isError: true
                     )
                 }
@@ -100,7 +100,7 @@ public struct ToolHandlers {
                     platform: platform
                 )
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(version))],
+                    content: [.text(text: JSONUtils.prettyPrint(version), annotations: nil, _meta: nil)],
                     isError: false
                 )
                 
@@ -119,7 +119,7 @@ public struct ToolHandlers {
                     keywords: args.keywords
                 )
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(localization))],
+                    content: [.text(text: JSONUtils.prettyPrint(localization), annotations: nil, _meta: nil)],
                     isError: false
                 )
                 
@@ -128,7 +128,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let localizations = try await client.listAppStoreVersionLocalizations(versionId: args.version_id)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(localizations))],
+                    content: [.text(text: JSONUtils.prettyPrint(localizations), annotations: nil, _meta: nil)],
                     isError: false
                 )
                 
@@ -137,7 +137,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let appInfos = try await client.listAppInfos(appId: args.app_id)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(appInfos))],
+                    content: [.text(text: JSONUtils.prettyPrint(appInfos), annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -146,7 +146,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let localizations = try await client.listAppInfoLocalizations(appInfoId: args.app_info_id)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(localizations))],
+                    content: [.text(text: JSONUtils.prettyPrint(localizations), annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -163,14 +163,14 @@ public struct ToolHandlers {
                     privacyPolicyUrl: args.privacy_policy_url
                 )
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(localization))],
+                    content: [.text(text: JSONUtils.prettyPrint(localization), annotations: nil, _meta: nil)],
                     isError: false
                 )
                 
             case "list_app_categories":
                 let categories = try await client.listAppCategories()
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(categories))],
+                    content: [.text(text: JSONUtils.prettyPrint(categories), annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -185,7 +185,7 @@ public struct ToolHandlers {
                     primaryCategoryId: args.primary_category_id
                 )
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(appInfo))],
+                    content: [.text(text: JSONUtils.prettyPrint(appInfo), annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -194,7 +194,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let groups = try await client.listBetaGroups(appId: args.app_id)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(groups))],
+                    content: [.text(text: JSONUtils.prettyPrint(groups), annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -206,7 +206,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let group = try await client.createBetaGroup(appId: args.app_id, name: args.name)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(group))],
+                    content: [.text(text: JSONUtils.prettyPrint(group), annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -215,7 +215,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let testers = try await client.listBetaTesters(betaGroupId: args.beta_group_id)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(testers))],
+                    content: [.text(text: JSONUtils.prettyPrint(testers), annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -227,7 +227,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 try await client.addBetaTesterToGroup(betaGroupId: args.beta_group_id, betaTesterId: args.beta_tester_id)
                 return CallTool.Result(
-                    content: [.text("Successfully linked tester \(args.beta_tester_id) to group \(args.beta_group_id).")],
+                    content: [.text(text: "Successfully linked tester \(args.beta_tester_id) to group \(args.beta_group_id).", annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -239,7 +239,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let reviews = try await client.listCustomerReviews(appId: args.app_id, limit: args.limit)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(reviews))],
+                    content: [.text(text: JSONUtils.prettyPrint(reviews), annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -251,14 +251,14 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let reply = try await client.submitCustomerReviewReply(reviewId: args.review_id, body: args.body)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(reply))],
+                    content: [.text(text: JSONUtils.prettyPrint(reply), annotations: nil, _meta: nil)],
                     isError: false
                 )
 
             case "list_users":
                 let users = try await client.listUsers()
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(users))],
+                    content: [.text(text: JSONUtils.prettyPrint(users), annotations: nil, _meta: nil)],
                     isError: false
                 )
                 
@@ -267,7 +267,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 try await client.submitAppStoreVersion(versionId: args.version_id)
                 return CallTool.Result(
-                    content: [.text("Successfully submitted version \(args.version_id) for review.")],
+                    content: [.text(text: "Successfully submitted version \(args.version_id) for review.", annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -279,7 +279,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let phased = try await client.managePhasedRelease(versionId: args.version_id, action: args.action)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(phased))],
+                    content: [.text(text: JSONUtils.prettyPrint(phased), annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -288,7 +288,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let prices = try await client.listAppPricePoints(appId: args.app_id)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(prices))],
+                    content: [.text(text: JSONUtils.prettyPrint(prices), annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -297,7 +297,7 @@ public struct ToolHandlers {
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let availability = try await client.getAppAvailability(appId: args.app_id)
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(availability))],
+                    content: [.text(text: JSONUtils.prettyPrint(availability), annotations: nil, _meta: nil)],
                     isError: false
                 )
 
@@ -314,19 +314,19 @@ public struct ToolHandlers {
                     territoryIds: args.territory_ids
                 )
                 return CallTool.Result(
-                    content: [.text(JSONUtils.prettyPrint(availability))],
+                    content: [.text(text: JSONUtils.prettyPrint(availability), annotations: nil, _meta: nil)],
                     isError: false
                 )
                 
             default:
                 return CallTool.Result(
-                    content: [.text("Unknown tool: \(name)")],
+                    content: [.text(text: "Unknown tool: \(name)", annotations: nil, _meta: nil)],
                     isError: true
                 )
             }
         } catch {
             return CallTool.Result(
-                content: [.text("Error executing tool \(name): \(error.localizedDescription)")],
+                content: [.text(text: "Error executing tool \(name): \(error.localizedDescription)", annotations: nil, _meta: nil)],
                 isError: true
             )
         }
