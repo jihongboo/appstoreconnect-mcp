@@ -1,0 +1,372 @@
+Command line invocation:
+    /Applications/Xcode-beta.app/Contents/Developer/usr/bin/xcodebuild -project appstoreconnect-mcp.xcodeproj -scheme MyTool -configuration Debug -destination platform=macOS
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  swift-system: https://github.com/apple/swift-system.git @ 1.6.4
+  swift-collections: https://github.com/apple/swift-collections.git @ 1.6.0
+  swift-crypto: https://github.com/apple/swift-crypto.git @ 3.15.1
+  mcp-swift-sdk: https://github.com/modelcontextprotocol/swift-sdk.git @ 0.12.1
+  swift-log: https://github.com/apple/swift-log.git @ 1.10.1
+  swift-nio: https://github.com/apple/swift-nio.git @ 2.101.3
+  swift-atomics: https://github.com/apple/swift-atomics.git @ 1.3.1
+  EventSource: https://github.com/mattt/eventsource.git @ 1.4.1
+  swift-asn1: https://github.com/apple/swift-asn1.git @ 1.7.1
+  AppStoreConnect-Swift-SDK: https://github.com/AvdLee/appstoreconnect-swift-sdk.git @ 4.4.1
+  URLQueryEncoder: https://github.com/CreateAPI/URLQueryEncoder.git @ 0.2.1
+
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:macOS, arch:arm64, id:00006021-000810C63ABB401E, name:My Mac }
+{ platform:macOS, arch:x86_64, id:00006021-000810C63ABB401E, name:My Mac }
+{ platform:macOS, arch:arm64, variant:DriverKit, id:00006021-000810C63ABB401E, name:My Mac }
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (36 targets)
+    Target 'MyTool' in project 'appstoreconnect-mcp'
+        ➜ Explicit dependency on target 'AppStoreConnect-Swift-SDK-product' in project 'AppStoreConnect-Swift-SDK'
+        ➜ Explicit dependency on target 'MCP-product' in project 'mcp-swift-sdk'
+    Target 'MCP-product' in project 'mcp-swift-sdk'
+        ➜ Explicit dependency on target 'MCP' in project 'mcp-swift-sdk'
+        ➜ Explicit dependency on target 'SystemPackage-product' in project 'swift-system'
+        ➜ Explicit dependency on target 'Logging-product' in project 'swift-log'
+        ➜ Explicit dependency on target 'EventSource-product' in project 'EventSource'
+    Target 'MCP' in project 'mcp-swift-sdk'
+        ➜ Explicit dependency on target 'SystemPackage-product' in project 'swift-system'
+        ➜ Explicit dependency on target 'Logging-product' in project 'swift-log'
+        ➜ Explicit dependency on target 'EventSource-product' in project 'EventSource'
+    Target 'EventSource-product' in project 'EventSource'
+        ➜ Explicit dependency on target 'EventSource' in project 'EventSource'
+        ➜ Explicit dependency on target 'NIOCore-product' in project 'swift-nio'
+    Target 'EventSource' in project 'EventSource'
+        ➜ Explicit dependency on target 'NIOCore-product' in project 'swift-nio'
+    Target 'NIOCore-product' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOCore' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOAtomics' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOConcurrencyHelpers' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIOBase64' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOOpenBSD' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOFreeBSD' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIODarwin' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOLinux' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWindows' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWASI' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIODataStructures' in project 'swift-nio'
+        ➜ Explicit dependency on target 'DequeModule-product' in project 'swift-collections'
+        ➜ Explicit dependency on target 'Atomics-product' in project 'swift-atomics'
+    Target 'NIOCore' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOAtomics' in project 'swift-nio'
+        ➜ Explicit dependency on target 'NIOConcurrencyHelpers' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIOBase64' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOOpenBSD' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOFreeBSD' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIODarwin' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOLinux' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWindows' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOWASI' in project 'swift-nio'
+        ➜ Explicit dependency on target '_NIODataStructures' in project 'swift-nio'
+        ➜ Explicit dependency on target 'DequeModule-product' in project 'swift-collections'
+        ➜ Explicit dependency on target 'Atomics-product' in project 'swift-atomics'
+    Target 'Atomics-product' in project 'swift-atomics'
+        ➜ Explicit dependency on target 'Atomics' in project 'swift-atomics'
+        ➜ Explicit dependency on target '_AtomicsShims' in project 'swift-atomics'
+    Target 'Atomics' in project 'swift-atomics'
+        ➜ Explicit dependency on target '_AtomicsShims' in project 'swift-atomics'
+    Target '_AtomicsShims' in project 'swift-atomics' (no dependencies)
+    Target 'DequeModule-product' in project 'swift-collections'
+        ➜ Explicit dependency on target 'DequeModule' in project 'swift-collections'
+        ➜ Explicit dependency on target 'InternalCollectionsUtilities' in project 'swift-collections'
+        ➜ Explicit dependency on target 'ContainersPreview' in project 'swift-collections'
+    Target 'DequeModule' in project 'swift-collections'
+        ➜ Explicit dependency on target 'InternalCollectionsUtilities' in project 'swift-collections'
+        ➜ Explicit dependency on target 'ContainersPreview' in project 'swift-collections'
+    Target 'ContainersPreview' in project 'swift-collections'
+        ➜ Explicit dependency on target 'InternalCollectionsUtilities' in project 'swift-collections'
+    Target 'InternalCollectionsUtilities' in project 'swift-collections' (no dependencies)
+    Target '_NIODataStructures' in project 'swift-nio' (no dependencies)
+    Target 'CNIOWASI' in project 'swift-nio' (no dependencies)
+    Target 'CNIOWindows' in project 'swift-nio' (no dependencies)
+    Target 'CNIOLinux' in project 'swift-nio' (no dependencies)
+    Target 'CNIODarwin' in project 'swift-nio' (no dependencies)
+    Target 'CNIOFreeBSD' in project 'swift-nio' (no dependencies)
+    Target 'CNIOOpenBSD' in project 'swift-nio' (no dependencies)
+    Target '_NIOBase64' in project 'swift-nio' (no dependencies)
+    Target 'NIOConcurrencyHelpers' in project 'swift-nio'
+        ➜ Explicit dependency on target 'CNIOAtomics' in project 'swift-nio'
+    Target 'CNIOAtomics' in project 'swift-nio' (no dependencies)
+    Target 'Logging-product' in project 'swift-log'
+        ➜ Explicit dependency on target 'Logging' in project 'swift-log'
+    Target 'Logging' in project 'swift-log' (no dependencies)
+    Target 'SystemPackage-product' in project 'swift-system'
+        ➜ Explicit dependency on target 'SystemPackage' in project 'swift-system'
+        ➜ Explicit dependency on target 'CSystem' in project 'swift-system'
+    Target 'SystemPackage' in project 'swift-system'
+        ➜ Explicit dependency on target 'CSystem' in project 'swift-system'
+    Target 'CSystem' in project 'swift-system' (no dependencies)
+    Target 'AppStoreConnect-Swift-SDK-product' in project 'AppStoreConnect-Swift-SDK'
+        ➜ Explicit dependency on target 'AppStoreConnect-Swift-SDK' in project 'AppStoreConnect-Swift-SDK'
+        ➜ Explicit dependency on target 'URLQueryEncoder-product' in project 'URLQueryEncoder'
+        ➜ Explicit dependency on target 'Crypto-product' in project 'swift-crypto'
+    Target 'AppStoreConnect-Swift-SDK' in project 'AppStoreConnect-Swift-SDK'
+        ➜ Explicit dependency on target 'URLQueryEncoder-product' in project 'URLQueryEncoder'
+        ➜ Explicit dependency on target 'Crypto-product' in project 'swift-crypto'
+    Target 'Crypto-product' in project 'swift-crypto'
+        ➜ Explicit dependency on target 'Crypto' in project 'swift-crypto'
+        ➜ Explicit dependency on target 'swift-crypto_Crypto' in project 'swift-crypto'
+    Target 'Crypto' in project 'swift-crypto'
+        ➜ Explicit dependency on target 'swift-crypto_Crypto' in project 'swift-crypto'
+    Target 'swift-crypto_Crypto' in project 'swift-crypto' (no dependencies)
+    Target 'URLQueryEncoder-product' in project 'URLQueryEncoder'
+        ➜ Explicit dependency on target 'URLQueryEncoder' in project 'URLQueryEncoder'
+    Target 'URLQueryEncoder' in project 'URLQueryEncoder' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+ReadFileContents /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/share/docc/features.json
+
+Build description signature: 67ac928d790a0578a5e2fe1895f0ffae
+Build description path: /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/XCBuildData/67ac928d790a0578a5e2fe1895f0ffae.xcbuilddata
+ClangStatCache /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk /Users/jihongbo/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx27.0-26A5378i-45874285e5972fffeae925c4ab065928.sdkstatcache
+    cd /Users/jihongbo/Developer/appstoreconnect-mcp/appstoreconnect-mcp.xcodeproj
+    /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -o /Users/jihongbo/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx27.0-26A5378i-45874285e5972fffeae925c4ab065928.sdkstatcache
+
+ProcessInfoPlistFile /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/swift-crypto_Crypto.bundle/Contents/Info.plist /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/swift-crypto.build/Debug/swift-crypto_Crypto-b.build/empty-swift-crypto_Crypto.plist (in target 'swift-crypto_Crypto' from project 'swift-crypto')
+    cd /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-crypto
+    builtin-infoPlistUtility /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/swift-crypto.build/Debug/swift-crypto_Crypto-b.build/empty-swift-crypto_Crypto.plist -producttype com.apple.product-type.bundle -expandbuildsettings -platform macosx -o /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/swift-crypto_Crypto.bundle/Contents/Info.plist
+
+SwiftDriver MyTool normal arm64 com.apple.xcode.tools.swift.compiler (in target 'MyTool' from project 'appstoreconnect-mcp')
+    cd /Users/jihongbo/Developer/appstoreconnect-mcp
+    builtin-SwiftDriver -- /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name MyTool -Onone @/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.SwiftFileList -DDEBUG -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-system/Sources/CSystem/include/module.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-atomics/Sources/_AtomicsShims/include/module.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOWASI.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOWindows/include/module.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOLinux.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIODarwin.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOFreeBSD.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOOpenBSD.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOAtomics.modulemap -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.3 -g -module-cache-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug -F /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/PackageFrameworks -F /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/jihongbo/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx27.0-26A5378i-45874285e5972fffeae925c4ab065928.sdkstatcache -output-file-map /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /Users/jihongbo/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool_const_extract_protocols.json -Xcc -iquote -Xcc /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool-generated-files.hmap -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool-own-target-headers.hmap -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/appstoreconnect-mcp-5d6af0a0c6939d0f043cd4ded3ec3e98-VFS/all-product-headers.yaml -Xcc -iquote -Xcc /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool-project-headers.hmap -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-system/Sources/CSystem/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-atomics/Sources/_AtomicsShims/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOWASI/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOWindows/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOLinux/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIODarwin/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOFreeBSD/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOOpenBSD/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOAtomics/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/DerivedSources-normal/arm64 -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/DerivedSources/arm64 -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool-Swift.h -working-directory /Users/jihongbo/Developer/appstoreconnect-mcp -experimental-emit-module-separately -disable-cmo
+
+SwiftCompile normal arm64 Compiling\ main.swift /Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/main.swift (in target 'MyTool' from project 'appstoreconnect-mcp')
+
+SwiftCompile normal arm64 /Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/main.swift (in target 'MyTool' from project 'appstoreconnect-mcp')
+    cd /Users/jihongbo/Developer/appstoreconnect-mcp
+    builtin-SwiftPerFileCompile main.swift
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/main.swift:133:21: warning: class property 'current' is unavailable from asynchronous contexts; currentRunLoop cannot be used from async contexts.; this is an error in the Swift 6 language mode
+131 |     
+132 |     // Wait for diagnostic tests to finish (since they run asynchronously)
+133 |     RunLoop.current.run()
+    |                     `- warning: class property 'current' is unavailable from asynchronous contexts; currentRunLoop cannot be used from async contexts.; this is an error in the Swift 6 language mode
+134 | }
+135 | 
+
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSRunLoop.h:37:48: note: 'current' declared here
+ 35 | ///
+ 36 | /// If a run loop does not yet exist for the thread, one is created and returned.
+ 37 | @property (class, readonly, strong) NSRunLoop *currentRunLoop NS_SWIFT_UNAVAILABLE_FROM_ASYNC("currentRunLoop cannot be used from async contexts.");
+    |                                                `- note: 'current' declared here
+ 38 | /// Returns the run loop of the main thread.
+ 39 | @property (class, readonly, strong) NSRunLoop *mainRunLoop API_AVAILABLE(macos(10.5), ios(2.0), watchos(2.0), tvos(9.0));
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/main.swift:133:21: warning: instance method 'run' is unavailable from asynchronous contexts; run cannot be used from async contexts.; this is an error in the Swift 6 language mode
+131 |     
+132 |     // Wait for diagnostic tests to finish (since they run asynchronously)
+133 |     RunLoop.current.run()
+    |                     `- warning: instance method 'run' is unavailable from asynchronous contexts; run cannot be used from async contexts.; this is an error in the Swift 6 language mode
+134 | }
+135 | 
+
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSRunLoop.h:118:1: note: 'run()' declared here
+116 | /// while (shouldKeepRunning && [theRL runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]);
+117 | /// ```
+118 | - (void)run NS_SWIFT_UNAVAILABLE_FROM_ASYNC("run cannot be used from async contexts.");
+    | `- note: 'run()' declared here
+119 | 
+120 | /// Runs the loop until the specified date, during which time it processes data from all attached input sources.
+SwiftEmitModule normal arm64 Emitting\ module\ for\ MyTool (in target 'MyTool' from project 'appstoreconnect-mcp')
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/main.swift:133:21: warning: class property 'current' is unavailable from asynchronous contexts; currentRunLoop cannot be used from async contexts.; this is an error in the Swift 6 language mode
+131 |     
+132 |     // Wait for diagnostic tests to finish (since they run asynchronously)
+133 |     RunLoop.current.run()
+    |                     `- warning: class property 'current' is unavailable from asynchronous contexts; currentRunLoop cannot be used from async contexts.; this is an error in the Swift 6 language mode
+134 | }
+135 | 
+
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSRunLoop.h:37:48: note: 'current' declared here
+ 35 | ///
+ 36 | /// If a run loop does not yet exist for the thread, one is created and returned.
+ 37 | @property (class, readonly, strong) NSRunLoop *currentRunLoop NS_SWIFT_UNAVAILABLE_FROM_ASYNC("currentRunLoop cannot be used from async contexts.");
+    |                                                `- note: 'current' declared here
+ 38 | /// Returns the run loop of the main thread.
+ 39 | @property (class, readonly, strong) NSRunLoop *mainRunLoop API_AVAILABLE(macos(10.5), ios(2.0), watchos(2.0), tvos(9.0));
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/main.swift:133:21: warning: instance method 'run' is unavailable from asynchronous contexts; run cannot be used from async contexts.; this is an error in the Swift 6 language mode
+131 |     
+132 |     // Wait for diagnostic tests to finish (since they run asynchronously)
+133 |     RunLoop.current.run()
+    |                     `- warning: instance method 'run' is unavailable from asynchronous contexts; run cannot be used from async contexts.; this is an error in the Swift 6 language mode
+134 | }
+135 | 
+
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSRunLoop.h:118:1: note: 'run()' declared here
+116 | /// while (shouldKeepRunning && [theRL runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]);
+117 | /// ```
+118 | - (void)run NS_SWIFT_UNAVAILABLE_FROM_ASYNC("run cannot be used from async contexts.");
+    | `- note: 'run()' declared here
+119 | 
+120 | /// Runs the loop until the specified date, during which time it processes data from all attached input sources.
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/Tools/ToolHandlers.swift:22:32: warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 20 |                 let apps = try await client.listApps(limit: args.limit)
+ 21 |                 return CallTool.Result(
+ 22 |                     content: [.text(JSONUtils.prettyPrint(apps))],
+    |                                `- warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 23 |                     isError: false
+ 24 |                 )
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/Tools/ToolHandlers.swift:31:32: warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 29 |                 let app = try await client.getAppDetails(appId: args.app_id)
+ 30 |                 return CallTool.Result(
+ 31 |                     content: [.text(JSONUtils.prettyPrint(app))],
+    |                                `- warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 32 |                     isError: false
+ 33 |                 )
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/Tools/ToolHandlers.swift:43:32: warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 41 |                 let builds = try await client.listBuilds(appId: args.app_id, limit: args.limit)
+ 42 |                 return CallTool.Result(
+ 43 |                     content: [.text(JSONUtils.prettyPrint(builds))],
+    |                                `- warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 44 |                     isError: false
+ 45 |                 )
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/Tools/ToolHandlers.swift:55:32: warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 53 |                 let versions = try await client.listAppStoreVersions(appId: args.app_id, limit: args.limit)
+ 54 |                 return CallTool.Result(
+ 55 |                     content: [.text(JSONUtils.prettyPrint(versions))],
+    |                                `- warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 56 |                     isError: false
+ 57 |                 )
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/Tools/ToolHandlers.swift:64:36: warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 62 |                 if let build = try await client.getLatestBuildInfo(appId: args.app_id) {
+ 63 |                     return CallTool.Result(
+ 64 |                         content: [.text(JSONUtils.prettyPrint(build))],
+    |                                    `- warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 65 |                         isError: false
+ 66 |                     )
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/Tools/ToolHandlers.swift:69:36: warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 67 |                 } else {
+ 68 |                     return CallTool.Result(
+ 69 |                         content: [.text("No builds found for app \(args.app_id)")],
+    |                                    `- warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 70 |                         isError: false
+ 71 |                     )
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/Tools/ToolHandlers.swift:92:36: warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 90 |                 default:
+ 91 |                     return CallTool.Result(
+ 92 |                         content: [.text("Invalid platform: \(args.platform). Must be one of: ios, macOs, tvOs, visionOs")],
+    |                                    `- warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+ 93 |                         isError: true
+ 94 |                     )
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/Tools/ToolHandlers.swift:103:32: warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+101 |                 )
+102 |                 return CallTool.Result(
+103 |                     content: [.text(JSONUtils.prettyPrint(version))],
+    |                                `- warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+104 |                     isError: false
+105 |                 )
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/Tools/ToolHandlers.swift:122:32: warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+120 |                 )
+121 |                 return CallTool.Result(
+122 |                     content: [.text(JSONUtils.prettyPrint(localization))],
+    |                                `- warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+123 |                     isError: false
+124 |                 )
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/Tools/ToolHandlers.swift:128:32: warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+126 |             default:
+127 |                 return CallTool.Result(
+128 |                     content: [.text("Unknown tool: \(name)")],
+    |                                `- warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+129 |                     isError: true
+130 |                 )
+
+/Users/jihongbo/Developer/appstoreconnect-mcp/MyTool/Tools/ToolHandlers.swift:134:28: warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+132 |         } catch {
+133 |             return CallTool.Result(
+134 |                 content: [.text("Error executing tool \(name): \(error.localizedDescription)")],
+    |                            `- warning: 'text(_:metadata:)' is deprecated: Use .text(text:annotations:_meta:) instead. [#DeprecatedDeclaration]
+135 |                 isError: true
+136 |             )
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+
+SwiftCompile normal arm64 (in target 'MyTool' from project 'appstoreconnect-mcp')
+    cd /Users/jihongbo/Developer/appstoreconnect-mcp
+    
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for MyTool (in target 'MyTool' from project 'appstoreconnect-mcp')
+
+SwiftDriver\ Compilation\ Requirements MyTool normal arm64 com.apple.xcode.tools.swift.compiler (in target 'MyTool' from project 'appstoreconnect-mcp')
+    cd /Users/jihongbo/Developer/appstoreconnect-mcp
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name MyTool -Onone @/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.SwiftFileList -DDEBUG -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-system/Sources/CSystem/include/module.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-atomics/Sources/_AtomicsShims/include/module.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOWASI.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOWindows/include/module.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOLinux.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIODarwin.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOFreeBSD.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOOpenBSD.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOAtomics.modulemap -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.3 -g -module-cache-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug -F /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/PackageFrameworks -F /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/jihongbo/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx27.0-26A5378i-45874285e5972fffeae925c4ab065928.sdkstatcache -output-file-map /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /Users/jihongbo/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool_const_extract_protocols.json -Xcc -iquote -Xcc /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool-generated-files.hmap -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool-own-target-headers.hmap -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/appstoreconnect-mcp-5d6af0a0c6939d0f043cd4ded3ec3e98-VFS/all-product-headers.yaml -Xcc -iquote -Xcc /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool-project-headers.hmap -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-system/Sources/CSystem/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-atomics/Sources/_AtomicsShims/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOWASI/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOWindows/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOLinux/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIODarwin/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOFreeBSD/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOOpenBSD/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOAtomics/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/DerivedSources-normal/arm64 -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/DerivedSources/arm64 -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool-Swift.h -working-directory /Users/jihongbo/Developer/appstoreconnect-mcp -experimental-emit-module-separately -disable-cmo
+
+Copy /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.swiftsourceinfo (in target 'MyTool' from project 'appstoreconnect-mcp')
+    cd /Users/jihongbo/Developer/appstoreconnect-mcp
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.swiftsourceinfo /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo
+
+Copy /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool.swiftmodule/arm64-apple-macos.swiftmodule /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.swiftmodule (in target 'MyTool' from project 'appstoreconnect-mcp')
+    cd /Users/jihongbo/Developer/appstoreconnect-mcp
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.swiftmodule /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool.swiftmodule/arm64-apple-macos.swiftmodule
+
+Copy /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool.swiftmodule/arm64-apple-macos.abi.json /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.abi.json (in target 'MyTool' from project 'appstoreconnect-mcp')
+    cd /Users/jihongbo/Developer/appstoreconnect-mcp
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.abi.json /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool.swiftmodule/arm64-apple-macos.abi.json
+
+SwiftDriverJobDiscovery normal arm64 Compiling main.swift (in target 'MyTool' from project 'appstoreconnect-mcp')
+
+SwiftDriver\ Compilation MyTool normal arm64 com.apple.xcode.tools.swift.compiler (in target 'MyTool' from project 'appstoreconnect-mcp')
+    cd /Users/jihongbo/Developer/appstoreconnect-mcp
+    builtin-Swift-Compilation -- /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name MyTool -Onone @/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.SwiftFileList -DDEBUG -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-system/Sources/CSystem/include/module.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-atomics/Sources/_AtomicsShims/include/module.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOWASI.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOWindows/include/module.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOLinux.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIODarwin.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOFreeBSD.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOOpenBSD.modulemap -Xcc -fmodule-map-file\=/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/GeneratedModuleMaps/CNIOAtomics.modulemap -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -target arm64-apple-macos26.3 -g -module-cache-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug -F /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/PackageFrameworks -F /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug -c -j12 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /Users/jihongbo/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/macosx27.0-26A5378i-45874285e5972fffeae925c4ab065928.sdkstatcache -output-file-map /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/ModuleCache.noindex -sdk-module-cache-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /Users/jihongbo/Library/Developer/Xcode/DerivedData/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool_const_extract_protocols.json -Xcc -iquote -Xcc /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool-generated-files.hmap -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool-own-target-headers.hmap -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/appstoreconnect-mcp-5d6af0a0c6939d0f043cd4ded3ec3e98-VFS/all-product-headers.yaml -Xcc -iquote -Xcc /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool-project-headers.hmap -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-system/Sources/CSystem/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-atomics/Sources/_AtomicsShims/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOWASI/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOWindows/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOLinux/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIODarwin/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOFreeBSD/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOOpenBSD/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/SourcePackages/checkouts/swift-nio/Sources/CNIOAtomics/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/include -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/DerivedSources-normal/arm64 -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/DerivedSources/arm64 -Xcc -I/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool-Swift.h -working-directory /Users/jihongbo/Developer/appstoreconnect-mcp -experimental-emit-module-separately -disable-cmo
+
+Ld /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool normal (in target 'MyTool' from project 'appstoreconnect-mcp')
+    cd /Users/jihongbo/Developer/appstoreconnect-mcp
+    /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.3 -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -O0 -Xlinker -no_warn_duplicate_libraries -L/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -L/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug -F/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/PackageFrameworks -F/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug -filelist /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.LinkFileList -Xlinker -rpath -Xlinker @loader_path -Xlinker -rpath -Xlinker /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/PackageFrameworks -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -dependency_info -Xlinker /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/Objects-normal/arm64/MyTool.swiftmodule -Xlinker -no_adhoc_codesign -o /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool
+
+CodeSign /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool (in target 'MyTool' from project 'appstoreconnect-mcp')
+    cd /Users/jihongbo/Developer/appstoreconnect-mcp
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --entitlements /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/appstoreconnect-mcp.build/Debug/MyTool.build/MyTool.xcent --timestamp\=none --generate-entitlement-der /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool
+
+RegisterExecutionPolicyException /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool (in target 'MyTool' from project 'appstoreconnect-mcp')
+    cd /Users/jihongbo/Developer/appstoreconnect-mcp
+    builtin-RegisterExecutionPolicyException /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool
+
+PruneExplicitPrecompiledModules /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /Users/jihongbo/Library/Developer/Xcode/DerivedData/SDKExplicitPrecompiledModules
+
+** BUILD SUCCEEDED **
+
