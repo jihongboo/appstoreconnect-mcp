@@ -3,10 +3,17 @@
 ## Build
 
 ```bash
-xcodebuild -project appstoreconnect-mcp.xcodeproj -scheme MyTool -configuration Debug
+swift build
 ```
 
-Build output: `~/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-*/Build/Products/Debug/MyTool`
+Build output: `.build/debug/appstoreconnect-mcp`
+
+Release build:
+```bash
+swift build -c release
+```
+
+Build output: `.build/release/appstoreconnect-mcp`
 
 ## Run
 
@@ -29,17 +36,17 @@ Interactive fallback prompts if env vars are missing.
 
 ## Architecture
 
-- **Entrypoint**: `MyTool/main.swift` — `--test` flag runs diagnostics; otherwise starts MCP server on `StdioTransport`.
-- **Tool definitions**: `MyTool/Tools/ToolDefinitions.swift` — 25 tools in `ToolDefinitions.allTools`.
-- **Handler dispatch**: `MyTool/Tools/ToolHandlers.swift` — decode args → call `ASCClient` → return `CallTool.Result`.
-- **API layer**: `MyTool/ASCClient.swift` — wraps `APIProvider` from `AppStoreConnect-Swift-SDK` (v4.4.1) with per-request instantiation.
-- **Credentials**: `MyTool/Credentials.swift` — `loadFromEnvironment()` reads env vars, supports `.p8` file or inline PEM string.
-- **Utils**: `MyTool/Utils/JSONUtils.swift` — pretty-print JSON, decode MCP `Value` dicts.
+- **Entrypoint**: `Sources/appstoreconnect-mcp/main.swift` — `--test` flag runs diagnostics; otherwise starts MCP server on `StdioTransport`.
+- **Tool definitions**: `Sources/appstoreconnect-mcp/Tools/ToolDefinitions.swift` — 25 tools in `ToolDefinitions.allTools`.
+- **Handler dispatch**: `Sources/appstoreconnect-mcp/Tools/ToolHandlers.swift` — decode args → call `ASCClient` → return `CallTool.Result`.
+- **API layer**: `Sources/appstoreconnect-mcp/ASCClient.swift` — wraps `APIProvider` from `AppStoreConnect-Swift-SDK` (v4.4.1) with per-request instantiation.
+- **Credentials**: `Sources/appstoreconnect-mcp/Credentials.swift` — `loadFromEnvironment()` reads env vars, supports `.p8` file or inline PEM string.
+- **Utils**: `Sources/appstoreconnect-mcp/Utils/JSONUtils.swift` — pretty-print JSON, decode MCP `Value` dicts.
 - **Transport**: `StdioTransport` via `mcp-swift-sdk` (v0.12.1). Server idle-keeps via `Task.sleep(nanoseconds: UInt64.max)`.
 
 ## Key constraints
 
-- **Xcode project, not SwiftPM** — no `Package.swift`. All deps fetched by Xcode during build.
+- **SwiftPM package** — `Package.swift` at root. Use `swift build` to compile.
 - **Swift 6 warnings** — `RunLoop.current.run()` in `--test` path (async context) and deprecated `.text(...)` API in handlers are pre-existing; avoid "fixing" them without explicit request.
 - **No tests, no CI, no linter config** in this repo.
 - Adding a new tool requires editing **3 files**: `ToolDefinitions.swift` (schema), `ToolHandlers.swift` (handler), `ASCClient.swift` (API method).

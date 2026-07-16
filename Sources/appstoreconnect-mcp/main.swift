@@ -145,13 +145,13 @@ let server = Server(
 
 // 2. Register handler for ListTools
 await server.withMethodHandler(ListTools.self) { _ in
-    await logToStderr("Received listTools request")
-    return await ListTools.Result(tools: ToolDefinitions.allTools)
+    logToStderr("Received listTools request")
+    return ListTools.Result(tools: ToolDefinitions.allTools)
 }
 
 // 3. Register handler for CallTool
 await server.withMethodHandler(CallTool.self) { params in
-    await logToStderr("Received callTool request for: \(params.name)")
+    logToStderr("Received callTool request for: \(params.name)")
     return await ToolHandlers.handleCallTool(name: params.name, arguments: params.arguments)
 }
 
