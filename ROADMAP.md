@@ -62,7 +62,7 @@ This document lists all core capabilities supported by the Apple [App Store Conn
   - [x] List In-App Purchases (Implemented: `list_in_app_purchases`)
   - [x] Create consumable, non-consumable, and non-renewing subscription IAPs (Implemented: `create_in_app_purchase`)
   - [ ] Modify IAP metadata and pricing schedules
-  - [ ] Manage IAP localized display names and descriptions
+  - [x] Manage IAP localized display names and descriptions (Implemented: `list_iap_versions`, `create_iap_localization`, `update_iap_localization`)
   - [ ] Upload and manage IAP App Store review screenshots
 - **Auto-Renewable Subscriptions**:
   - [ ] Create and manage subscription groups and subscription items
@@ -105,7 +105,7 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 ### 7. Certificates, Identifiers & Profiles
 - [x] Create, revoke, download development / distribution certificates (Implemented: `list_certificates`)
 - [x] Register and list test device UDIDs (Implemented: `list_devices`, `register_device`)
-- [ ] Register Bundle IDs and configure service capabilities
+- [x] Register Bundle IDs and configure service capabilities (Implemented: `list_bundle_ids`, `register_bundle_id`)
 - [x] Generate, download, and delete provisioning profiles (Implemented: `list_provisioning_profiles`)
 
 ---

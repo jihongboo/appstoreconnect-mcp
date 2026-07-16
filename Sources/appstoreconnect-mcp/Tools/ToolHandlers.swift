@@ -564,6 +564,71 @@ public struct ToolHandlers {
                     isError: false
                 )
                 
+            case "list_bundle_ids":
+                let bundleIds = try await client.listBundleIds()
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(bundleIds), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "register_bundle_id":
+                struct Args: Codable {
+                    let name: String
+                    let platform: String
+                    let identifier: String
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let bundleId = try await client.registerBundleId(name: args.name, platform: args.platform, identifier: args.identifier)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(bundleId), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "list_iap_versions":
+                struct Args: Codable { let iap_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let versions = try await client.listInAppPurchaseVersions(iapId: args.iap_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(versions), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "create_iap_localization":
+                struct Args: Codable {
+                    let iap_version_id: String
+                    let name: String
+                    let locale: String
+                    let description: String?
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let localization = try await client.createInAppPurchaseLocalization(
+                    iapVersionId: args.iap_version_id,
+                    name: args.name,
+                    locale: args.locale,
+                    description: args.description
+                )
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(localization), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "update_iap_localization":
+                struct Args: Codable {
+                    let localization_id: String
+                    let name: String?
+                    let description: String?
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let localization = try await client.updateInAppPurchaseLocalization(
+                    localizationId: args.localization_id,
+                    name: args.name,
+                    description: args.description
+                )
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(localization), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+                
             default:
                 return CallTool.Result(
                     content: [.text(text: "Unknown tool: \(name)", annotations: nil, _meta: nil)],

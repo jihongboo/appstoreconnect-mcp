@@ -643,6 +643,67 @@ public struct ToolDefinitions {
         ])
     )
 
+    public static let listBundleIds = Tool(
+        name: "list_bundle_ids",
+        description: "List all registered Bundle IDs.",
+        inputSchema: .object(["type": .string("object"), "properties": .object([:])])
+    )
+    
+    public static let registerBundleId = Tool(
+        name: "register_bundle_id",
+        description: "Register a new Bundle ID for an App.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "name": .object(["type": .string("string"), "description": .string("The name of the Bundle ID.")]),
+                "platform": .object(["type": .string("string"), "description": .string("Platform: IOS, MAC_OS, UNIVERSAL.")]),
+                "identifier": .object(["type": .string("string"), "description": .string("The unique identifier, e.g. com.example.app.")])
+            ]),
+            "required": .array([.string("name"), .string("platform"), .string("identifier")])
+        ])
+    )
+    
+    public static let listIapVersions = Tool(
+        name: "list_iap_versions",
+        description: "List versions of a specific In-App Purchase.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "iap_id": .object(["type": .string("string"), "description": .string("The In-App Purchase V2 ID.")])
+            ]),
+            "required": .array([.string("iap_id")])
+        ])
+    )
+    
+    public static let createIapLocalization = Tool(
+        name: "create_iap_localization",
+        description: "Create localization metadata for an In-App Purchase version.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "iap_version_id": .object(["type": .string("string"), "description": .string("The In-App Purchase Version ID.")]),
+                "name": .object(["type": .string("string"), "description": .string("The display name of the IAP product.")]),
+                "locale": .object(["type": .string("string"), "description": .string("The locale code, e.g. en-US.")]),
+                "description": .object(["type": .string("string"), "description": .string("Optional description for the IAP product.")])
+            ]),
+            "required": .array([.string("iap_version_id"), .string("name"), .string("locale")])
+        ])
+    )
+    
+    public static let updateIapLocalization = Tool(
+        name: "update_iap_localization",
+        description: "Update localization metadata for an In-App Purchase localization.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "localization_id": .object(["type": .string("string"), "description": .string("The In-App Purchase Localization V2 ID.")]),
+                "name": .object(["type": .string("string"), "description": .string("Optional new display name.")]),
+                "description": .object(["type": .string("string"), "description": .string("Optional new description.")])
+            ]),
+            "required": .array([.string("localization_id")])
+        ])
+    )
+
     public static let allTools = [
         listApps,
         getAppDetails,
@@ -690,6 +751,11 @@ public struct ToolDefinitions {
         createInAppPurchase,
         deleteBetaGroup,
         deleteUserInvitation,
-        deleteCustomerReviewReply
+        deleteCustomerReviewReply,
+        listBundleIds,
+        registerBundleId,
+        listIapVersions,
+        createIapLocalization,
+        updateIapLocalization
     ]
 }

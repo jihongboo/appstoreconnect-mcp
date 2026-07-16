@@ -984,4 +984,120 @@ public struct ASCClient {
         let request = APIEndpoint.v1.customerReviewResponses.id(replyId).delete
         try await self.provider.request(request)
     }
+
+    // MARK: - Phase 6: Bundle IDs and In-App Purchase Localizations
+    
+    /// List registered Bundle IDs
+    public func listBundleIds() async throws -> AppStoreConnect_Swift_SDK.BundleIDsResponse {
+        let request = APIEndpoint.v1.bundleIDs.get()
+        return try await self.provider.request(request)
+    }
+    
+    private struct BundleIDCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let name: String
+                let platform: String
+                let identifier: String
+            }
+            let type = "bundleIds"
+            let attributes: Attributes
+        }
+        let data: Data
+    }
+    
+    /// Register a new Bundle ID
+    public func registerBundleId(name: String, platform: String, identifier: String) async throws -> AppStoreConnect_Swift_SDK.BundleIDResponse {
+        let body = BundleIDCreateRequestLocal(data: .init(attributes: .init(name: name, platform: platform, identifier: identifier)))
+        let request = Request<AppStoreConnect_Swift_SDK.BundleIDResponse>(
+            path: "v1/bundleIds",
+            method: "POST",
+            body: body,
+            id: "bundleIds-post"
+        )
+        return try await self.provider.request(request)
+    }
+    
+    /// List versions of a specific In-App Purchase
+    public func listInAppPurchaseVersions(iapId: String) async throws -> AppStoreConnect_Swift_SDK.InAppPurchaseVersionsResponse {
+        let request = APIEndpoint.v2.inAppPurchases.id(iapId).versions.get()
+        return try await self.provider.request(request)
+    }
+    
+    private struct InAppPurchaseLocalizationV2CreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let name: String
+                let locale: String
+                let description: String?
+            }
+            struct Relationships: Encodable {
+                struct Version: Encodable {
+                    struct VersionData: Encodable {
+                        let type = "inAppPurchaseVersions"
+                        let id: String
+                    }
+                    let data: VersionData
+                }
+                let version: Version
+            }
+            let type = "inAppPurchaseLocalizations"
+            let attributes: Attributes
+            let relationships: Relationships
+        }
+        let data: Data
+    }
+    
+    /// Create a localization description for an In-App Purchase version
+    public func createInAppPurchaseLocalization(
+        iapVersionId: String,
+        name: String,
+        locale: String,
+        description: String?
+    ) async throws -> AppStoreConnect_Swift_SDK.InAppPurchaseLocalizationV2Response {
+        let body = InAppPurchaseLocalizationV2CreateRequestLocal(
+            data: .init(
+                attributes: .init(name: name, locale: locale, description: description),
+                relationships: .init(version: .init(data: .init(id: iapVersionId)))
+            )
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.InAppPurchaseLocalizationV2Response>(
+            path: "v2/inAppPurchaseLocalizations",
+            method: "POST",
+            body: body,
+            id: "inAppPurchaseLocalizationsV2-post"
+        )
+        return try await self.provider.request(request)
+    }
+    
+    private struct InAppPurchaseLocalizationV2UpdateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let name: String?
+                let description: String?
+            }
+            let type = "inAppPurchaseLocalizations"
+            let id: String
+            let attributes: Attributes
+        }
+        let data: Data
+    }
+    
+    /// Update an existing In-App Purchase localization (V2)
+    public func updateInAppPurchaseLocalization(
+        localizationId: String,
+        name: String?,
+        description: String?
+    ) async throws -> AppStoreConnect_Swift_SDK.InAppPurchaseLocalizationV2Response {
+        let body = InAppPurchaseLocalizationV2UpdateRequestLocal(
+            data: .init(id: localizationId, attributes: .init(name: name, description: description))
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.InAppPurchaseLocalizationV2Response>(
+            path: "v2/inAppPurchaseLocalizations/\(localizationId)",
+            method: "PATCH",
+            body: body,
+            id: "inAppPurchaseLocalizationsV2-patch"
+        )
+        return try await self.provider.request(request)
+    }
 }
