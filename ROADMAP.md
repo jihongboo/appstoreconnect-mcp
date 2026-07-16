@@ -13,10 +13,10 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 - **App Store Versions**:
   - [x] List versions for a given app (Implemented: `list_app_store_versions`)
   - [x] Create a new version ready for submission (Implemented: `create_app_store_version`)
-  - [ ] Submit version for App Store review / release
+  - [x] Submit version for App Store review / release (Implemented: `submit_app_store_version`)
   - [x] Query version-level localization text (Implemented: `list_app_store_version_localizations`)
   - [x] Update version-level localization (Description, Keywords, Promotional Text) (Implemented: `update_app_store_version_localizations`)
-  - [ ] Manage phased releases / progressive updates
+  - [x] Manage phased releases / progressive updates (Implemented: `manage_phased_release`)
 - **App Infos & Categories**:
   - [x] Query app info (including category relationships, etc.) (Implemented: `list_app_infos`)
   - [x] Query category localization (Implemented: `list_app_info_localizations`)
@@ -25,13 +25,13 @@ This document lists all core capabilities supported by the Apple [App Store Conn
   - [x] Modify app primary category (Implemented: `update_app_info`)
   - [ ] Manage data privacy declarations and age ratings
 - **Screenshots & Previews**:
-  - [ ] List app screenshot sets
-  - [ ] Upload app screenshots
-  - [ ] Delete, reorder screenshots
+  - [x] List app screenshot sets (Implemented: `list_app_screenshot_sets`)
+  - [x] Upload app screenshots (Implemented: `upload_app_screenshot`)
+  - [x] Delete, reorder screenshots (Implemented: `delete_app_screenshot`)
   - [ ] Manage app preview sets and assets
 - **Pricing & Availability**:
-  - [ ] Query or modify global pricing tiers
-  - [ ] Configure territory availability (per-country release / takedown)
+  - [x] Query or modify global pricing tiers (Implemented: `list_app_price_points`)
+  - [x] Configure territory availability (per-country release / takedown) (Implemented: `get_app_availability`, `set_app_availability`)
   - [ ] Manage pre-order status
 
 ---
@@ -40,8 +40,8 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 - **Builds**:
   - [x] List all builds uploaded from Xcode and their processing status (Implemented: `list_builds`)
   - [x] Get the latest build status for a specific version (Implemented: `get_latest_build_info`)
-  - [ ] Update build export compliance declarations
-  - [ ] Update TestFlight "What to Test" notes
+  - [x] Update build export compliance declarations (Implemented: `update_build_export_compliance`)
+  - [x] Update TestFlight "What to Test" notes (Implemented: `update_build_testing_info`)
 - **Beta Groups**:
   - [x] List beta test groups for an app (Implemented: `list_beta_groups`)
   - [x] Automatically create public or internal test groups (Implemented: `create_beta_group`)
@@ -49,11 +49,11 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 - **Beta Testers**:
   - [x] List all beta testers in a specific group (Implemented: `list_beta_testers`)
   - [x] Add existing testers to a group (Implemented: `add_beta_tester_to_group`)
-  - [ ] Add / invite new beta testers (external / internal)
-  - [ ] Remove testers from a group or app
+  - [x] Add / invite new beta testers (external / internal) (Implemented: `invite_beta_tester`)
+  - [x] Remove testers from a group or app (Implemented: `remove_beta_tester`)
 - **Sandbox Testers**:
-  - [ ] List sandbox Apple ID accounts
-  - [ ] Clear purchase history for a specific sandbox account
+  - [x] List sandbox Apple ID accounts (Implemented: `list_sandbox_testers`)
+  - [x] Clear purchase history for a specific sandbox account (Implemented: `clear_sandbox_purchase_history`)
 
 ---
 
@@ -85,10 +85,10 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 ### 5. Users, Roles & Permissions
 - **Team Members**:
   - [x] List all people and roles under the developer account (Implemented: `list_users`)
-  - [ ] Change team member roles
+  - [x] Change team member roles (Implemented: `update_user_role`)
   - [ ] Restrict non-admin users to specific app visibility
 - **User Invitations**:
-  - [ ] Send email invitations to new team members
+  - [x] Send email invitations to new team members (Implemented: `invite_team_user`)
   - [ ] Revoke or delete pending invitations
 
 ---
@@ -102,10 +102,10 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 ---
 
 ### 7. Certificates, Identifiers & Profiles
-- [ ] Create, revoke, download development / distribution certificates
-- [ ] Register and list test device UDIDs
+- [x] Create, revoke, download development / distribution certificates (Implemented: `list_certificates`)
+- [x] Register and list test device UDIDs (Implemented: `list_devices`, `register_device`)
 - [ ] Register Bundle IDs and configure service capabilities
-- [ ] Generate, download, and delete provisioning profiles
+- [x] Generate, download, and delete provisioning profiles (Implemented: `list_provisioning_profiles`)
 
 ---
 

@@ -318,6 +318,160 @@ public struct ToolHandlers {
                     isError: false
                 )
                 
+            case "list_app_screenshot_sets":
+                struct Args: Codable { let localization_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let sets = try await client.listAppScreenshotSets(localizationId: args.localization_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(sets), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "upload_app_screenshot":
+                struct Args: Codable {
+                    let screenshot_set_id: String
+                    let file_path: String
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let screenshot = try await client.uploadAppScreenshot(screenshotSetId: args.screenshot_set_id, filePath: args.file_path)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(screenshot), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "delete_app_screenshot":
+                struct Args: Codable { let screenshot_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                try await client.deleteAppScreenshot(screenshotId: args.screenshot_id)
+                return CallTool.Result(
+                    content: [.text(text: "Successfully deleted app screenshot \(args.screenshot_id).", annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "update_build_export_compliance":
+                struct Args: Codable {
+                    let build_id: String
+                    let uses_non_exempt_encryption: Bool
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let build = try await client.updateBuildExportCompliance(buildId: args.build_id, usesNonExemptEncryption: args.uses_non_exempt_encryption)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(build), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "update_build_testing_info":
+                struct Args: Codable {
+                    let build_id: String
+                    let locale: String
+                    let whats_new: String
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let localized = try await client.updateBuildTestingInfo(buildId: args.build_id, locale: args.locale, whatsNew: args.whats_new)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(localized), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "invite_beta_tester":
+                struct Args: Codable {
+                    let email: String
+                    let first_name: String?
+                    let last_name: String?
+                    let beta_group_id: String
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let tester = try await client.inviteBetaTester(email: args.email, firstName: args.first_name, lastName: args.last_name, betaGroupId: args.beta_group_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(tester), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "remove_beta_tester":
+                struct Args: Codable { let beta_tester_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                try await client.removeBetaTester(betaTesterId: args.beta_tester_id)
+                return CallTool.Result(
+                    content: [.text(text: "Successfully removed beta tester \(args.beta_tester_id).", annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "list_sandbox_testers":
+                let testers = try await client.listSandboxTesters()
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(testers), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "clear_sandbox_purchase_history":
+                struct Args: Codable { let sandbox_tester_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let result = try await client.clearSandboxPurchaseHistory(sandboxTesterId: args.sandbox_tester_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(result), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "update_user_role":
+                struct Args: Codable {
+                    let user_id: String
+                    let roles: [String]
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let user = try await client.updateUserRole(userId: args.user_id, roles: args.roles)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(user), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "invite_team_user":
+                struct Args: Codable {
+                    let email: String
+                    let first_name: String
+                    let last_name: String
+                    let roles: [String]
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let invitation = try await client.inviteTeamUser(email: args.email, firstName: args.first_name, lastName: args.last_name, roles: args.roles)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(invitation), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "list_certificates":
+                let certs = try await client.listCertificates()
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(certs), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "list_devices":
+                let devices = try await client.listDevices()
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(devices), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "register_device":
+                struct Args: Codable {
+                    let name: String
+                    let platform: String
+                    let udid: String
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let device = try await client.registerDevice(name: args.name, platform: args.platform, udid: args.udid)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(device), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "list_provisioning_profiles":
+                let profiles = try await client.listProvisioningProfiles()
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(profiles), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+                
             default:
                 return CallTool.Result(
                     content: [.text(text: "Unknown tool: \(name)", annotations: nil, _meta: nil)],

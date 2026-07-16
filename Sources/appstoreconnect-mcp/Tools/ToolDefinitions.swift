@@ -371,6 +371,183 @@ public struct ToolDefinitions {
         ])
     )
 
+    public static let listAppScreenshotSets = Tool(
+        name: "list_app_screenshot_sets",
+        description: "List App Screenshot Sets for a specific version localization ID.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "localization_id": .object(["type": .string("string"), "description": .string("The App Store Version Localization ID.")])
+            ]),
+            "required": .array([.string("localization_id")])
+        ])
+    )
+    
+    public static let uploadAppScreenshot = Tool(
+        name: "upload_app_screenshot",
+        description: "Upload a screenshot from local file path to a specific screenshot set.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "screenshot_set_id": .object(["type": .string("string"), "description": .string("The App Screenshot Set ID.")]),
+                "file_path": .object(["type": .string("string"), "description": .string("The absolute local file path of the image.")])
+            ]),
+            "required": .array([.string("screenshot_set_id"), .string("file_path")])
+        ])
+    )
+    
+    public static let deleteAppScreenshot = Tool(
+        name: "delete_app_screenshot",
+        description: "Delete an app screenshot by ID.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "screenshot_id": .object(["type": .string("string"), "description": .string("The App Screenshot ID.")])
+            ]),
+            "required": .array([.string("screenshot_id")])
+        ])
+    )
+    
+    public static let updateBuildExportCompliance = Tool(
+        name: "update_build_export_compliance",
+        description: "Set export compliance declaration (usesNonExemptEncryption) on a build.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "build_id": .object(["type": .string("string"), "description": .string("The Build ID.")]),
+                "uses_non_exempt_encryption": .object(["type": .string("boolean"), "description": .string("Whether the build uses non-exempt encryption.")])
+            ]),
+            "required": .array([.string("build_id"), .string("uses_non_exempt_encryption")])
+        ])
+    )
+    
+    public static let updateBuildTestingInfo = Tool(
+        name: "update_build_testing_info",
+        description: "Update TestFlight testing info (What to Test) for a build and locale.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "build_id": .object(["type": .string("string"), "description": .string("The Build ID.")]),
+                "locale": .object(["type": .string("string"), "description": .string("The language locale, e.g. en-US.")]),
+                "whats_new": .object(["type": .string("string"), "description": .string("The text describing what to test in this build.")])
+            ]),
+            "required": .array([.string("build_id"), .string("locale"), .string("whats_new")])
+        ])
+    )
+    
+    public static let inviteBetaTester = Tool(
+        name: "invite_beta_tester",
+        description: "Invite a new TestFlight beta tester and add them to a beta group.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "email": .object(["type": .string("string"), "description": .string("Tester's email address.")]),
+                "first_name": .object(["type": .string("string"), "description": .string("Optional first name.")]),
+                "last_name": .object(["type": .string("string"), "description": .string("Optional last name.")]),
+                "beta_group_id": .object(["type": .string("string"), "description": .string("The Beta Group ID.")])
+            ]),
+            "required": .array([.string("email"), .string("beta_group_id")])
+        ])
+    )
+    
+    public static let removeBetaTester = Tool(
+        name: "remove_beta_tester",
+        description: "Remove a TestFlight beta tester by ID.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "beta_tester_id": .object(["type": .string("string"), "description": .string("The Beta Tester ID.")])
+            ]),
+            "required": .array([.string("beta_tester_id")])
+        ])
+    )
+    
+    public static let listSandboxTesters = Tool(
+        name: "list_sandbox_testers",
+        description: "List SandBox testers.",
+        inputSchema: .object(["type": .string("object"), "properties": .object([:])])
+    )
+    
+    public static let clearSandboxPurchaseHistory = Tool(
+        name: "clear_sandbox_purchase_history",
+        description: "Clear SandBox purchase history for a specific tester.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "sandbox_tester_id": .object(["type": .string("string"), "description": .string("The Sandbox Tester ID.")])
+            ]),
+            "required": .array([.string("sandbox_tester_id")])
+        ])
+    )
+    
+    public static let updateUserRole = Tool(
+        name: "update_user_role",
+        description: "Update team user roles on the developer account.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "user_id": .object(["type": .string("string"), "description": .string("The User ID.")]),
+                "roles": .object([
+                    "type": .string("array"),
+                    "items": .object(["type": .string("string")]),
+                    "description": .string("List of roles (e.g. ['ADMIN', 'DEVELOPER']).")
+                ])
+            ]),
+            "required": .array([.string("user_id"), .string("roles")])
+        ])
+    )
+    
+    public static let inviteTeamUser = Tool(
+        name: "invite_team_user",
+        description: "Invite a new team member to your developer account.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "email": .object(["type": .string("string"), "description": .string("Email address.")]),
+                "first_name": .object(["type": .string("string"), "description": .string("First name.")]),
+                "last_name": .object(["type": .string("string"), "description": .string("Last name.")]),
+                "roles": .object([
+                    "type": .string("array"),
+                    "items": .object(["type": .string("string")]),
+                    "description": .string("List of roles (e.g. ['DEVELOPER']).")
+                ])
+            ]),
+            "required": .array([.string("email"), .string("first_name"), .string("last_name"), .string("roles")])
+        ])
+    )
+    
+    public static let listCertificates = Tool(
+        name: "list_certificates",
+        description: "List developer certificates.",
+        inputSchema: .object(["type": .string("object"), "properties": .object([:])])
+    )
+    
+    public static let listDevices = Tool(
+        name: "list_devices",
+        description: "List provisioning UDID devices.",
+        inputSchema: .object(["type": .string("object"), "properties": .object([:])])
+    )
+    
+    public static let registerDevice = Tool(
+        name: "register_device",
+        description: "Register a new provisioning UDID device.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "name": .object(["type": .string("string"), "description": .string("Device name.")]),
+                "platform": .object(["type": .string("string"), "description": .string("Platform: IOS or MAC_OS.")]),
+                "udid": .object(["type": .string("string"), "description": .string("The UDID of the device.")])
+            ]),
+            "required": .array([.string("name"), .string("platform"), .string("udid")])
+        ])
+    )
+    
+    public static let listProvisioningProfiles = Tool(
+        name: "list_provisioning_profiles",
+        description: "List provisioning profiles.",
+        inputSchema: .object(["type": .string("object"), "properties": .object([:])])
+    )
+
     public static let allTools = [
         listApps,
         getAppDetails,
@@ -396,6 +573,21 @@ public struct ToolDefinitions {
         managePhasedRelease,
         listAppPricePoints,
         getAppAvailability,
-        setAppAvailability
+        setAppAvailability,
+        listAppScreenshotSets,
+        uploadAppScreenshot,
+        deleteAppScreenshot,
+        updateBuildExportCompliance,
+        updateBuildTestingInfo,
+        inviteBetaTester,
+        removeBetaTester,
+        listSandboxTesters,
+        clearSandboxPurchaseHistory,
+        updateUserRole,
+        inviteTeamUser,
+        listCertificates,
+        listDevices,
+        registerDevice,
+        listProvisioningProfiles
     ]
 }

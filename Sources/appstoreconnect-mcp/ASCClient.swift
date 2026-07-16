@@ -522,4 +522,317 @@ public struct ASCClient {
         )
         return try await self.provider.request(request)
     }
+
+    // MARK: - Phase 2: Screenshots & Previews
+    
+    /// List Screenshot Sets for a version localization
+    public func listAppScreenshotSets(localizationId: String) async throws -> AppStoreConnect_Swift_SDK.AppScreenshotSetsResponse {
+        let request = APIEndpoint.v1.appStoreVersionLocalizations.id(localizationId).appScreenshotSets.get()
+        return try await self.provider.request(request)
+    }
+    
+    /// Delete an app screenshot by ID
+    public func deleteAppScreenshot(screenshotId: String) async throws {
+        let request = APIEndpoint.v1.appScreenshots.id(screenshotId).delete
+        try await self.provider.request(request)
+    }
+
+    /// Upload a screenshot file (local path) to Apple Store Connect screenshot set
+    public func uploadAppScreenshot(screenshotSetId: String, filePath: String) async throws -> AppStoreConnect_Swift_SDK.AppScreenshotResponse {
+        let fileURL = URL(fileURLWithPath: filePath)
+        let fileData = try Data(contentsOf: fileURL)
+        let fileName = fileURL.lastPathComponent
+        let fileSize = fileData.count
+        
+        // 1. Create instance placeholder on Apple to get S3 upload operations
+        let createRequest = AppStoreConnect_Swift_SDK.AppScreenshotCreateRequest(
+            data: .init(
+                type: .appScreenshots,
+                attributes: .init(fileSize: fileSize, fileName: fileName),
+                relationships: .init(appScreenshotSet: .init(data: .init(type: .appScreenshotSets, id: screenshotSetId)))
+            )
+        )
+        let placeholderRequest = APIEndpoint.v1.appScreenshots.post(createRequest)
+        let placeholderResponse = try await self.provider.request(placeholderRequest)
+        
+        let screenshotId = placeholderResponse.data.id
+        guard let operations = placeholderResponse.data.attributes?.uploadOperations else {
+            throw NSError(domain: "ASCClient", code: 500, userInfo: [NSLocalizedDescriptionKey: "Failed to get upload operations from Apple"])
+        }
+        
+        // 2. Perform PUT operations to upload chunks to S3
+        for operation in operations {
+            guard let urlString = operation.url,
+                  let url = URL(string: urlString),
+                  let offset = operation.offset,
+                  let length = operation.length else {
+                continue
+            }
+            
+            let chunkData = fileData.subdata(in: offset..<(offset + length))
+            var request = URLRequest(url: url)
+            request.httpMethod = operation.method ?? "PUT"
+            request.httpBody = chunkData
+            
+            // Add custom S3 headers required by Apple
+            if let headers = operation.requestHeaders {
+                for header in headers {
+                    if let name = header.name, let value = header.value {
+                        request.setValue(value, forHTTPHeaderField: name)
+                    }
+                }
+            }
+            
+            let (_, urlResponse) = try await URLSession.shared.data(for: request)
+            guard let httpResponse = urlResponse as? HTTPURLResponse, 200..<300 ~= httpResponse.statusCode else {
+                throw NSError(domain: "ASCClient", code: 500, userInfo: [NSLocalizedDescriptionKey: "Failed to upload image chunk to Apple S3 storage"])
+            }
+        }
+        
+        // 3. Inform Apple that the upload is completed
+        let updateRequest = AppStoreConnect_Swift_SDK.AppScreenshotUpdateRequest(
+            data: .init(
+                type: .appScreenshots,
+                id: screenshotId,
+                attributes: .init(isUploaded: true)
+            )
+        )
+        let commitRequest = APIEndpoint.v1.appScreenshots.id(screenshotId).patch(updateRequest)
+        return try await self.provider.request(commitRequest)
+    }
+
+    // MARK: - Phase 3: TestFlight compliance, invitations, sandbox, roles
+    
+    /// Update Build Export Compliance (usesNonExemptEncryption)
+    public func updateBuildExportCompliance(buildId: String, usesNonExemptEncryption: Bool) async throws -> AppStoreConnect_Swift_SDK.BuildResponse {
+        let requestBody = BuildUpdateRequest(
+            data: .init(
+                type: .builds,
+                id: buildId,
+                attributes: .init(usesNonExemptEncryption: usesNonExemptEncryption)
+            )
+        )
+        let request = APIEndpoint.v1.builds.id(buildId).patch(requestBody)
+        return try await self.provider.request(request)
+    }
+    
+    private struct BetaBuildLocalizationCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let locale: String
+                let whatsNew: String
+            }
+            struct Relationships: Encodable {
+                struct BuildData: Encodable {
+                    let type = "builds"
+                    let id: String
+                }
+                struct Build: Encodable {
+                    let data: BuildData
+                }
+                let build: Build
+            }
+            let type = "betaBuildLocalizations"
+            let attributes: Attributes
+            let relationships: Relationships
+        }
+        let data: Data
+    }
+    
+    private struct BetaBuildLocalizationUpdateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let whatsNew: String
+            }
+            let type = "betaBuildLocalizations"
+            let id: String
+            let attributes: Attributes
+        }
+        let data: Data
+    }
+    
+    /// Update or create TestFlight testing information (What to Test) for a build
+    public func updateBuildTestingInfo(buildId: String, locale: String, whatsNew: String) async throws -> AppStoreConnect_Swift_SDK.BetaBuildLocalizationResponse {
+        // 1. Fetch existing beta build localizations for this build
+        let fetchRequest = APIEndpoint.v1.builds.id(buildId).betaBuildLocalizations.get()
+        let fetchResponse = try await self.provider.request(fetchRequest)
+        
+        if let existing = fetchResponse.data.first(where: { $0.attributes?.locale == locale }) {
+            // Update existing localization
+            let updateBody = BetaBuildLocalizationUpdateRequestLocal(
+                data: .init(id: existing.id, attributes: .init(whatsNew: whatsNew))
+            )
+            let request = Request<AppStoreConnect_Swift_SDK.BetaBuildLocalizationResponse>(
+                path: "v1/betaBuildLocalizations/\(existing.id)",
+                method: "PATCH",
+                body: updateBody,
+                id: "betaBuildLocalizations-patch"
+            )
+            return try await self.provider.request(request)
+        } else {
+            // Create a new localization
+            let createBody = BetaBuildLocalizationCreateRequestLocal(
+                data: .init(
+                    attributes: .init(locale: locale, whatsNew: whatsNew),
+                    relationships: .init(build: .init(data: .init(id: buildId)))
+                )
+            )
+            let request = Request<AppStoreConnect_Swift_SDK.BetaBuildLocalizationResponse>(
+                path: "v1/betaBuildLocalizations",
+                method: "POST",
+                body: createBody,
+                id: "betaBuildLocalizations-post"
+            )
+            return try await self.provider.request(request)
+        }
+    }
+    
+    /// Invite a new Beta Tester and add to a specific Beta Group
+    public func inviteBetaTester(email: String, firstName: String?, lastName: String?, betaGroupId: String) async throws -> AppStoreConnect_Swift_SDK.BetaTesterResponse {
+        let groupLink = BetaTesterCreateRequest.Data.Relationships.BetaGroups(
+            data: [.init(type: .betaGroups, id: betaGroupId)]
+        )
+        let createRequest = BetaTesterCreateRequest(
+            data: .init(
+                type: .betaTesters,
+                attributes: .init(firstName: firstName, lastName: lastName, email: email),
+                relationships: .init(betaGroups: groupLink, builds: nil)
+            )
+        )
+        let request = APIEndpoint.v1.betaTesters.post(createRequest)
+        return try await self.provider.request(request)
+    }
+    
+    /// Remove beta tester by ID
+    public func removeBetaTester(betaTesterId: String) async throws {
+        let request = APIEndpoint.v1.betaTesters.id(betaTesterId).delete
+        try await self.provider.request(request)
+    }
+    
+    /// List Sandbox Testers (v2)
+    public func listSandboxTesters() async throws -> AppStoreConnect_Swift_SDK.SandboxTestersV2Response {
+        let request = APIEndpoint.v2.sandboxTesters.get()
+        return try await self.provider.request(request)
+    }
+    
+    /// Clear Sandbox purchase history for a tester
+    public func clearSandboxPurchaseHistory(sandboxTesterId: String) async throws -> AppStoreConnect_Swift_SDK.SandboxTestersClearPurchaseHistoryRequestV2Response {
+        let testersRelation = SandboxTestersClearPurchaseHistoryRequestV2CreateRequest.Data.Relationships.SandboxTesters(
+            data: [.init(type: .sandboxTesters, id: sandboxTesterId)]
+        )
+        let createRequest = SandboxTestersClearPurchaseHistoryRequestV2CreateRequest(
+            data: .init(
+                type: .sandboxTestersClearPurchaseHistoryRequest,
+                relationships: .init(sandboxTesters: testersRelation)
+            )
+        )
+        let request = APIEndpoint.v2.sandboxTestersClearPurchaseHistoryRequest.post(createRequest)
+        return try await self.provider.request(request)
+    }
+    
+    private struct UserRoleUpdateRequest: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let roles: [String]
+            }
+            let type = "users"
+            let id: String
+            let attributes: Attributes
+        }
+        let data: Data
+    }
+    
+    /// Update user roles
+    public func updateUserRole(userId: String, roles: [String]) async throws -> AppStoreConnect_Swift_SDK.UserResponse {
+        let body = UserRoleUpdateRequest(data: .init(id: userId, attributes: .init(roles: roles)))
+        let request = Request<AppStoreConnect_Swift_SDK.UserResponse>(
+            path: "v1/users/\(userId)",
+            method: "PATCH",
+            body: body,
+            id: "users-patch"
+        )
+        return try await self.provider.request(request)
+    }
+    
+    private struct UserInvitationCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let email: String
+                let firstName: String
+                let lastName: String
+                let roles: [String]
+                let allAppsVisible: Bool?
+                let provisioningAllowed: Bool?
+            }
+            let type = "userInvitations"
+            let attributes: Attributes
+        }
+        let data: Data
+    }
+    
+    /// Invite a new team user
+    public func inviteTeamUser(email: String, firstName: String, lastName: String, roles: [String]) async throws -> AppStoreConnect_Swift_SDK.UserInvitationResponse {
+        let body = UserInvitationCreateRequestLocal(
+            data: .init(attributes: .init(
+                email: email,
+                firstName: firstName,
+                lastName: lastName,
+                roles: roles,
+                allAppsVisible: true,
+                provisioningAllowed: true
+            ))
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.UserInvitationResponse>(
+            path: "v1/userInvitations",
+            method: "POST",
+            body: body,
+            id: "userInvitations-post"
+        )
+        return try await self.provider.request(request)
+    }
+
+    // MARK: - Phase 4: Certificates, Devices, Profiles
+    
+    /// List certificates
+    public func listCertificates() async throws -> AppStoreConnect_Swift_SDK.CertificatesResponse {
+        let request = APIEndpoint.v1.certificates.get()
+        return try await self.provider.request(request)
+    }
+    
+    /// List devices
+    public func listDevices() async throws -> AppStoreConnect_Swift_SDK.DevicesResponse {
+        let request = APIEndpoint.v1.devices.get()
+        return try await self.provider.request(request)
+    }
+    
+    private struct DeviceCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let name: String
+                let platform: String
+                let udid: String
+            }
+            let type = "devices"
+            let attributes: Attributes
+        }
+        let data: Data
+    }
+    
+    /// Register a new provisioning device
+    public func registerDevice(name: String, platform: String, udid: String) async throws -> AppStoreConnect_Swift_SDK.DeviceResponse {
+        let body = DeviceCreateRequestLocal(data: .init(attributes: .init(name: name, platform: platform, udid: udid)))
+        let request = Request<AppStoreConnect_Swift_SDK.DeviceResponse>(
+            path: "v1/devices",
+            method: "POST",
+            body: body,
+            id: "devices-post"
+        )
+        return try await self.provider.request(request)
+    }
+    
+    /// List provisioning profiles
+    public func listProvisioningProfiles() async throws -> AppStoreConnect_Swift_SDK.ProfilesResponse {
+        let request = APIEndpoint.v1.profiles.get()
+        return try await self.provider.request(request)
+    }
 }
