@@ -1,0 +1,10 @@
+.build/
+.git/
+.gitignore
+.swiftpm/
+Dockerfile
+glama.json
+README.md
+ROADMAP.md
+Todo.md
+LICENSE
