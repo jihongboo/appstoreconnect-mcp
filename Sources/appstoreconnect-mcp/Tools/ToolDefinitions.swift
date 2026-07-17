@@ -174,6 +174,50 @@ public struct ToolDefinitions {
             "required": .array([.string("localization_id")])
         ])
     )
+
+    public static let createAppStoreVersionLocalization = Tool(
+        name: "create_app_store_version_localization",
+        description: "Create a new localized metadata (locale, description, keywords, support URL, marketing URL, what's new description) for an App Store version.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "version_id": .object([
+                    "type": .string("string"),
+                    "description": .string("The unique identifier (ID) of the app store version.")
+                ]),
+                "locale": .object([
+                    "type": .string("string"),
+                    "description": .string("The locale code (e.g. 'en-US', 'zh-Hans') for the localization.")
+                ]),
+                "promotional_text": .object([
+                    "type": .string("string"),
+                    "description": .string("The promotional text (optional).")
+                ]),
+                "description": .object([
+                    "type": .string("string"),
+                    "description": .string("The description of the version (optional).")
+                ]),
+                "keywords": .object([
+                    "type": .string("string"),
+                    "description": .string("The keywords for search separated by commas (optional).")
+                ]),
+                "support_url": .object([
+                    "type": .string("string"),
+                    "description": .string("The support URL (optional).")
+                ]),
+                "marketing_url": .object([
+                    "type": .string("string"),
+                    "description": .string("The marketing URL (optional).")
+                ]),
+                "whats_new": .object([
+                    "type": .string("string"),
+                    "description": .string("The description of what's new in this version localization (optional).")
+                ])
+            ]),
+            "required": .array([.string("version_id"), .string("locale")])
+        ])
+    )
+
     public static let listAppStoreVersionLocalizations = Tool(
         name: "list_app_store_version_localizations",
         description: "List localizations (e.g. description, keywords) for a specific App Store version.",
@@ -216,6 +260,41 @@ public struct ToolDefinitions {
                 ])
             ]),
             "required": .array([.string("app_info_id")])
+        ])
+    )
+
+    public static let createAppInfoLocalization = Tool(
+        name: "create_app_info_localization",
+        description: "Create a new localized metadata (locale, name, subtitle, privacy policy URL, privacy policy text) for an App Info.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_info_id": .object([
+                    "type": .string("string"),
+                    "description": .string("The unique identifier (ID) of the app info.")
+                ]),
+                "locale": .object([
+                    "type": .string("string"),
+                    "description": .string("The locale code (e.g. 'en-US', 'zh-Hans') for the localization.")
+                ]),
+                "name": .object([
+                    "type": .string("string"),
+                    "description": .string("The localized name of the app (optional).")
+                ]),
+                "subtitle": .object([
+                    "type": .string("string"),
+                    "description": .string("The subtitle of the app (optional).")
+                ]),
+                "privacy_policy_url": .object([
+                    "type": .string("string"),
+                    "description": .string("The privacy policy URL (optional).")
+                ]),
+                "privacy_policy_text": .object([
+                    "type": .string("string"),
+                    "description": .string("The privacy policy text (optional).")
+                ])
+            ]),
+            "required": .array([.string("app_info_id"), .string("locale")])
         ])
     )
 
@@ -1055,9 +1134,11 @@ public struct ToolDefinitions {
         getLatestBuildInfo,
         createAppStoreVersion,
         updateAppStoreVersion,
+        createAppStoreVersionLocalization,
         updateAppStoreVersionLocalizations,
         listAppStoreVersionLocalizations,
         listAppInfos,
+        createAppInfoLocalization,
         listAppInfoLocalizations,
         updateAppInfoLocalizations,
         listAppCategories,

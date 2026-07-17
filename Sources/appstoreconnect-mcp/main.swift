@@ -10,7 +10,6 @@ func logToStderr(_ message: String, terminator: String = "\n") {
         handle.write(data)
     }
 }
-
 // -------------------------------------------------------------
 // Built-in Diagnostic Test Mode (with Interactive Support)
 // -------------------------------------------------------------

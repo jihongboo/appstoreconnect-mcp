@@ -173,6 +173,84 @@ public struct ASCClient {
         return response.data
     }
 
+    private struct AppStoreVersionLocalizationCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let locale: String
+                let description: String?
+                let keywords: String?
+                let marketingURL: URL?
+                let promotionalText: String?
+                let supportURL: URL?
+                let whatsNew: String?
+
+                enum CodingKeys: String, CodingKey {
+                    case locale
+                    case description
+                    case keywords
+                    case marketingURL = "marketingUrl"
+                    case promotionalText
+                    case supportURL = "supportUrl"
+                    case whatsNew
+                }
+            }
+            struct Relationships: Encodable {
+                struct AppStoreVersion: Encodable {
+                    struct Data: Encodable {
+                        let type = "appStoreVersions"
+                        let id: String
+                    }
+                    let data: Data
+                }
+                let appStoreVersion: AppStoreVersion
+            }
+            let type = "appStoreVersionLocalizations"
+            let attributes: Attributes
+            let relationships: Relationships
+        }
+        let data: Data
+    }
+
+    /// Create a localization description for an App Store version
+    public func createAppStoreVersionLocalization(
+        versionId: String,
+        locale: String,
+        description: String?,
+        keywords: String?,
+        marketingUrl: String?,
+        promotionalText: String?,
+        supportUrl: String?,
+        whatsNew: String?
+    ) async throws -> AppStoreVersionLocalization {
+        let marketingURL = marketingUrl.flatMap { URL(string: $0) }
+        let supportURL = supportUrl.flatMap { URL(string: $0) }
+        
+        let body = AppStoreVersionLocalizationCreateRequestLocal(
+            data: .init(
+                attributes: .init(
+                    locale: locale,
+                    description: description,
+                    keywords: keywords,
+                    marketingURL: marketingURL,
+                    promotionalText: promotionalText,
+                    supportURL: supportURL,
+                    whatsNew: whatsNew
+                ),
+                relationships: .init(
+                    appStoreVersion: .init(data: .init(id: versionId))
+                )
+            )
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.AppStoreVersionLocalizationResponse>(
+            path: "v1/appStoreVersionLocalizations",
+            method: "POST",
+            body: body,
+            id: "appStoreVersionLocalizations-post"
+        )
+        let response = try await self.provider.request(request)
+        return response.data
+    }
+
     private struct SubtitleUpdateRequest: Encodable {
         struct Data: Encodable {
             struct Attributes: Encodable {
@@ -217,6 +295,64 @@ public struct ASCClient {
             method: "PATCH",
             body: body,
             id: "appInfoLocalizations-patch"
+        )
+        return try await self.provider.request(request)
+    }
+
+    private struct AppInfoLocalizationCreateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let locale: String
+                let name: String?
+                let subtitle: String?
+                let privacyPolicyUrl: String?
+                let privacyPolicyText: String?
+            }
+            struct Relationships: Encodable {
+                struct AppInfo: Encodable {
+                    struct Data: Encodable {
+                        let type = "appInfos"
+                        let id: String
+                    }
+                    let data: Data
+                }
+                let appInfo: AppInfo
+            }
+            let type = "appInfoLocalizations"
+            let attributes: Attributes
+            let relationships: Relationships
+        }
+        let data: Data
+    }
+
+    /// Create a localization description for an App Info
+    public func createAppInfoLocalization(
+        appInfoId: String,
+        locale: String,
+        name: String?,
+        subtitle: String?,
+        privacyPolicyUrl: String?,
+        privacyPolicyText: String?
+    ) async throws -> AppStoreConnect_Swift_SDK.AppInfoLocalizationResponse {
+        let body = AppInfoLocalizationCreateRequestLocal(
+            data: .init(
+                attributes: .init(
+                    locale: locale,
+                    name: name,
+                    subtitle: subtitle,
+                    privacyPolicyUrl: privacyPolicyUrl,
+                    privacyPolicyText: privacyPolicyText
+                ),
+                relationships: .init(
+                    appInfo: .init(data: .init(id: appInfoId))
+                )
+            )
+        )
+        let request = Request<AppStoreConnect_Swift_SDK.AppInfoLocalizationResponse>(
+            path: "v1/appInfoLocalizations",
+            method: "POST",
+            body: body,
+            id: "appInfoLocalizations-post"
         )
         return try await self.provider.request(request)
     }
