@@ -94,6 +94,47 @@ public struct ASCClient {
         return response.data
     }
 
+    private struct AppStoreVersionUpdateRequestLocal: Encodable {
+        struct Data: Encodable {
+            struct Attributes: Encodable {
+                let earliestReleaseDate: String?
+                let releaseType: String?
+                let versionString: String?
+            }
+            let type = "appStoreVersions"
+            let id: String
+            let attributes: Attributes
+        }
+        let data: Data
+    }
+
+    /// Update App Store Version (versionString, releaseType, earliestReleaseDate)
+    public func updateAppStoreVersion(
+        versionId: String,
+        versionString: String?,
+        releaseType: String?,
+        earliestReleaseDate: String?
+    ) async throws -> AppStoreVersion {
+        let body = AppStoreVersionUpdateRequestLocal(
+            data: .init(
+                id: versionId,
+                attributes: .init(
+                    earliestReleaseDate: earliestReleaseDate,
+                    releaseType: releaseType,
+                    versionString: versionString
+                )
+            )
+        )
+        let request = Request<AppStoreVersionResponse>(
+            path: "v1/appStoreVersions/\(versionId)",
+            method: "PATCH",
+            body: body,
+            id: "appStoreVersions-patch"
+        )
+        let response = try await self.provider.request(request)
+        return response.data
+    }
+
     /// List all localizations for a specific app store version
     public func listAppStoreVersionLocalizations(versionId: String) async throws -> [AppStoreVersionLocalization] {
         let request = APIEndpoint.v1.appStoreVersions.id(versionId).appStoreVersionLocalizations.get()
@@ -101,14 +142,15 @@ public struct ASCClient {
         return response.data
     }
 
-    /// Update version localization (promotionalText, description, keywords, supportUrl, marketingUrl)
+    /// Update version localization (promotionalText, description, keywords, supportUrl, marketingUrl, whatsNew)
     public func updateAppStoreVersionLocalizations(
         localizationId: String,
         promotionalText: String?,
         description: String?,
         keywords: String?,
         supportUrl: String?,
-        marketingUrl: String?
+        marketingUrl: String?,
+        whatsNew: String?
     ) async throws -> AppStoreVersionLocalization {
         let marketingURL = marketingUrl.flatMap { URL(string: $0) }
         let supportURL = supportUrl.flatMap { URL(string: $0) }
@@ -118,7 +160,8 @@ public struct ASCClient {
             keywords: keywords,
             marketingURL: marketingURL,
             promotionalText: promotionalText,
-            supportURL: supportURL
+            supportURL: supportURL,
+            whatsNew: whatsNew
         )
         let data = AppStoreVersionLocalizationUpdateRequest.Data(
             type: .appStoreVersionLocalizations,
@@ -134,6 +177,7 @@ public struct ASCClient {
         struct Data: Encodable {
             struct Attributes: Encodable {
                 let privacyPolicyUrl: String?
+                let privacyPolicyText: String?
                 let subtitle: String?
             }
             let type = "appInfoLocalizations"
@@ -155,16 +199,17 @@ public struct ASCClient {
         return try await self.provider.request(request)
     }
 
-    /// Update App Info Localization (subtitle, privacyPolicyUrl)
+    /// Update App Info Localization (subtitle, privacyPolicyUrl, privacyPolicyText)
     public func updateAppInfoLocalization(
         localizationId: String,
         subtitle: String?,
-        privacyPolicyUrl: String?
+        privacyPolicyUrl: String?,
+        privacyPolicyText: String?
     ) async throws -> AppStoreConnect_Swift_SDK.AppInfoLocalizationResponse {
         let body = SubtitleUpdateRequest(
             data: .init(
                 id: localizationId,
-                attributes: .init(privacyPolicyUrl: privacyPolicyUrl, subtitle: subtitle)
+                attributes: .init(privacyPolicyUrl: privacyPolicyUrl, privacyPolicyText: privacyPolicyText, subtitle: subtitle)
             )
         )
         let request = Request<AppStoreConnect_Swift_SDK.AppInfoLocalizationResponse>(

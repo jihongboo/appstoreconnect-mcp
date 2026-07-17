@@ -109,9 +109,36 @@ public struct ToolDefinitions {
         ])
     )
 
+    public static let updateAppStoreVersion = Tool(
+        name: "update_app_store_version",
+        description: "Update attributes of an App Store Version, such as its version string, release type, or release date.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "version_id": .object([
+                    "type": .string("string"),
+                    "description": .string("The unique identifier (ID) of the App Store version.")
+                ]),
+                "version_string": .object([
+                    "type": .string("string"),
+                    "description": .string("The version string, e.g., '1.0.1' (optional).")
+                ]),
+                "release_type": .object([
+                    "type": .string("string"),
+                    "description": .string("The release type: MANUAL, AFTER_APPROVAL, SCHEDULED (optional).")
+                ]),
+                "earliest_release_date": .object([
+                    "type": .string("string"),
+                    "description": .string("The earliest release date in ISO 8601 format, e.g., '2026-12-31T23:59:59Z' (optional).")
+                ])
+            ]),
+            "required": .array([.string("version_id")])
+        ])
+    )
+
     public static let updateAppStoreVersionLocalizations = Tool(
         name: "update_app_store_version_localizations",
-        description: "Update the localized metadata (promotional text, description, keywords, support URL, marketing URL) of an App Store version localization.",
+        description: "Update the localized metadata (promotional text, description, keywords, support URL, marketing URL, what's new description) of an App Store version localization.",
         inputSchema: .object([
             "type": .string("object"),
             "properties": .object([
@@ -138,6 +165,10 @@ public struct ToolDefinitions {
                 "marketing_url": .object([
                     "type": .string("string"),
                     "description": .string("The marketing URL (optional).")
+                ]),
+                "whats_new": .object([
+                    "type": .string("string"),
+                    "description": .string("The description of what's new in this version localization (optional).")
                 ])
             ]),
             "required": .array([.string("localization_id")])
@@ -190,7 +221,7 @@ public struct ToolDefinitions {
 
     public static let updateAppInfoLocalizations = Tool(
         name: "update_app_info_localizations",
-        description: "Update the localized App Info (subtitle, privacy policy URL) of an App Info Localization.",
+        description: "Update the localized App Info (subtitle, privacy policy URL, privacy policy text) of an App Info Localization.",
         inputSchema: .object([
             "type": .string("object"),
             "properties": .object([
@@ -205,6 +236,10 @@ public struct ToolDefinitions {
                 "privacy_policy_url": .object([
                     "type": .string("string"),
                     "description": .string("The privacy policy URL (optional).")
+                ]),
+                "privacy_policy_text": .object([
+                    "type": .string("string"),
+                    "description": .string("The privacy policy text (optional).")
                 ])
             ]),
             "required": .array([.string("localization_id")])
@@ -1019,6 +1054,7 @@ public struct ToolDefinitions {
         listAppStoreVersions,
         getLatestBuildInfo,
         createAppStoreVersion,
+        updateAppStoreVersion,
         updateAppStoreVersionLocalizations,
         listAppStoreVersionLocalizations,
         listAppInfos,

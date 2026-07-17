@@ -103,7 +103,26 @@ public struct ToolHandlers {
                     content: [.text(text: JSONUtils.prettyPrint(version), annotations: nil, _meta: nil)],
                     isError: false
                 )
-                
+
+            case "update_app_store_version":
+                struct Args: Codable {
+                    let version_id: String
+                    let version_string: String?
+                    let release_type: String?
+                    let earliest_release_date: String?
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let version = try await client.updateAppStoreVersion(
+                    versionId: args.version_id,
+                    versionString: args.version_string,
+                    releaseType: args.release_type,
+                    earliestReleaseDate: args.earliest_release_date
+                )
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(version), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
             case "update_app_store_version_localizations":
                 struct Args: Codable {
                     let localization_id: String
@@ -112,6 +131,7 @@ public struct ToolHandlers {
                     let keywords: String?
                     let support_url: String?
                     let marketing_url: String?
+                    let whats_new: String?
                 }
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let localization = try await client.updateAppStoreVersionLocalizations(
@@ -120,7 +140,8 @@ public struct ToolHandlers {
                     description: args.description,
                     keywords: args.keywords,
                     supportUrl: args.support_url,
-                    marketingUrl: args.marketing_url
+                    marketingUrl: args.marketing_url,
+                    whatsNew: args.whats_new
                 )
                 return CallTool.Result(
                     content: [.text(text: JSONUtils.prettyPrint(localization), annotations: nil, _meta: nil)],
@@ -159,12 +180,14 @@ public struct ToolHandlers {
                     let localization_id: String
                     let subtitle: String?
                     let privacy_policy_url: String?
+                    let privacy_policy_text: String?
                 }
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let localization = try await client.updateAppInfoLocalization(
                     localizationId: args.localization_id,
                     subtitle: args.subtitle,
-                    privacyPolicyUrl: args.privacy_policy_url
+                    privacyPolicyUrl: args.privacy_policy_url,
+                    privacyPolicyText: args.privacy_policy_text
                 )
                 return CallTool.Result(
                     content: [.text(text: JSONUtils.prettyPrint(localization), annotations: nil, _meta: nil)],
