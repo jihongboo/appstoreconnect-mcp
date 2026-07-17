@@ -860,6 +860,58 @@ public struct ToolHandlers {
                     isError: false
                 )
                 
+            case "get_app_perf_metrics":
+                struct Args: Codable {
+                    let app_id: String
+                    let platform: String?
+                    let metric_type: String?
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let metrics = try await client.getAppPerfMetrics(
+                    appId: args.app_id,
+                    platform: args.platform,
+                    metricType: args.metric_type
+                )
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(metrics), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "list_build_diagnostic_signatures":
+                struct Args: Codable {
+                    let build_id: String
+                    let diagnostic_type: String?
+                    let limit: Int?
+                }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let signatures = try await client.listBuildDiagnosticSignatures(
+                    buildId: args.build_id,
+                    diagnosticType: args.diagnostic_type,
+                    limit: args.limit
+                )
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(signatures), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "get_age_rating_declaration":
+                struct Args: Codable { let app_info_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let declaration = try await client.getAgeRatingDeclaration(appInfoId: args.app_info_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(declaration), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+
+            case "end_app_pre_order":
+                struct Args: Codable { let app_id: String }
+                let args = try JSONUtils.decode(arguments, to: Args.self)
+                let response = try await client.endAppPreOrder(appId: args.app_id)
+                return CallTool.Result(
+                    content: [.text(text: JSONUtils.prettyPrint(response), annotations: nil, _meta: nil)],
+                    isError: false
+                )
+                
             default:
                 return CallTool.Result(
                     content: [.text(text: "Unknown tool: \(name)", annotations: nil, _meta: nil)],

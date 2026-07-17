@@ -952,6 +952,58 @@ public struct ToolDefinitions {
         ])
     )
 
+    public static let getAppPerfMetrics = Tool(
+        name: "get_app_perf_metrics",
+        description: "Get performance and power metrics (hang rate, battery, launch time, memory) for a specific app.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_id": .object(["type": .string("string"), "description": .string("The unique ID of the app.")]),
+                "platform": .object(["type": .string("string"), "description": .string("Optional filter platform: IOS.")]),
+                "metric_type": .object(["type": .string("string"), "description": .string("Optional filter metric type: DISK, HANG, BATTERY, LAUNCH, MEMORY, ANIMATION, TERMINATION, STORAGE.")])
+            ]),
+            "required": .array([.string("app_id")])
+        ])
+    )
+    
+    public static let listBuildDiagnosticSignatures = Tool(
+        name: "list_build_diagnostic_signatures",
+        description: "List diagnostic signatures (crash logs, hang logs) for a specific Xcode build.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "build_id": .object(["type": .string("string"), "description": .string("The build unique ID.")]),
+                "diagnostic_type": .object(["type": .string("string"), "description": .string("Optional diagnostic type filter: DISK_WRITES, HANGS, LAUNCHES.")]),
+                "limit": .object(["type": .string("integer"), "description": .string("Optional pagination limit (1-50).")])
+            ]),
+            "required": .array([.string("build_id")])
+        ])
+    )
+    
+    public static let getAgeRatingDeclaration = Tool(
+        name: "get_age_rating_declaration",
+        description: "Get age rating declaration details for a specific app info ID.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_info_id": .object(["type": .string("string"), "description": .string("The app info ID.")])
+            ]),
+            "required": .array([.string("app_info_id")])
+        ])
+    )
+    
+    public static let endAppPreOrder = Tool(
+        name: "end_app_pre_order",
+        description: "End app pre-order state immediately and make the app available on App Store.",
+        inputSchema: .object([
+            "type": .string("object"),
+            "properties": .object([
+                "app_id": .object(["type": .string("string"), "description": .string("The unique ID of the app.")])
+            ]),
+            "required": .array([.string("app_id")])
+        ])
+    )
+
     public static let allTools = [
         listApps,
         getAppDetails,
@@ -1023,6 +1075,10 @@ public struct ToolDefinitions {
         listSubscriptionPromotionalOffers,
         getIapPriceSchedule,
         getIapReviewScreenshot,
-        createIapReviewScreenshot
+        createIapReviewScreenshot,
+        getAppPerfMetrics,
+        listBuildDiagnosticSignatures,
+        getAgeRatingDeclaration,
+        endAppPreOrder
     ]
 }

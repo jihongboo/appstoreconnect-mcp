@@ -23,7 +23,7 @@ This document lists all core capabilities supported by the Apple [App Store Conn
   - [x] Update app subtitle (Implemented: `update_app_info_localizations`)
   - [x] List all official App Store category IDs (Implemented: `list_app_categories`)
   - [x] Modify app primary category (Implemented: `update_app_info`)
-  - [ ] Manage data privacy declarations and age ratings
+  - [x] Manage data privacy declarations and age ratings (Implemented: `get_age_rating_declaration`)
 - **Screenshots & Previews**:
   - [x] List app screenshot sets (Implemented: `list_app_screenshot_sets`)
   - [x] Upload app screenshots (Implemented: `upload_app_screenshot`)
@@ -32,7 +32,7 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 - **Pricing & Availability**:
   - [x] Query or modify global pricing tiers (Implemented: `list_app_price_points`)
   - [x] Configure territory availability (per-country release / takedown) (Implemented: `get_app_availability`, `set_app_availability`)
-  - [ ] Manage pre-order status
+  - [x] Manage pre-order status (Implemented: `end_app_pre_order`)
 
 ---
 
@@ -98,8 +98,8 @@ This document lists all core capabilities supported by the Apple [App Store Conn
 ### 6. Reports & Analytics
 - [x] Download Sales and Trends Reports (CSV) (Implemented: `download_sales_and_trends_reports`)
 - [x] Download Finance Reports (Implemented: `download_finance_reports`)
-- [ ] Query app crash logs and statistics
-- [ ] Get power, launch time, memory, and other performance metrics
+- [x] Query app crash logs and statistics (Implemented: `list_build_diagnostic_signatures`)
+- [x] Get power, launch time, memory, and other performance metrics (Implemented: `get_app_perf_metrics`)
 
 ---
 
