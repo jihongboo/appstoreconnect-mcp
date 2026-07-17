@@ -55,7 +55,7 @@ This server is a native Swift command-line program targeting macOS 15 and above.
 If you use macOS, you can easily install the app store connect MCP server from a Homebrew Tap:
 
 ```bash
-brew install <your-github-username>/tap/appstoreconnect-mcp
+brew install jihongboo/tap/appstoreconnect-mcp
 ```
 
 This will automatically download the pre-compiled, code-signed, and Apple-notarized binary and link it to your system PATH. Once installed, you can verify it by running:
@@ -64,19 +64,29 @@ This will automatically download the pre-compiled, code-signed, and Apple-notari
 appstoreconnect-mcp --test
 ```
 
-### Option 2: Pre-compiled Binaries (GitHub Releases)
+### Option 2: Via Mint
 
-1. Go to the [Releases](https://github.com/<your-github-username>/appstoreconnect-mcp/releases) page.
+If you use [Mint](https://github.com/yonaskolb/Mint), a package manager for Swift command line tools, you can install it using:
+
+```bash
+mint install jihongboo/appstoreconnect-mcp
+```
+
+This will clone, build, and install the tool locally. Once installed, you can run it via `mint run appstoreconnect-mcp` or direct path depending on your Mint link settings.
+
+### Option 3: Pre-compiled Binaries (GitHub Releases)
+
+1. Go to the [Releases](https://github.com/jihongboo/appstoreconnect-mcp/releases) page.
 2. Download the latest `appstoreconnect-mcp.zip` archive.
 3. Extract the archive to a directory on your machine.
 4. Run the executable in your terminal or configure its path in your MCP client.
 
-### Option 3: Build from Source
+### Option 4: Build from Source
 
 If you prefer to compile the application locally, clone this repository and build using Swift Package Manager:
 
 ```bash
-git clone https://github.com/<your-github-username>/appstoreconnect-mcp.git
+git clone https://github.com/jihongboo/appstoreconnect-mcp.git
 cd appstoreconnect-mcp
 swift build -c release
 ```
