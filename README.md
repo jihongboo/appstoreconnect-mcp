@@ -1,5 +1,7 @@
 # App Store Connect MCP Server (Swift)
 
+[![appstoreconnect-mcp MCP server](https://glama.ai/mcp/servers/jihongboo/appstoreconnect-mcp/badges/card.svg)](https://glama.ai/mcp/servers/jihongboo/appstoreconnect-mcp)
+
 This is a Model Context Protocol (MCP) server built in Swift that integrates with the [App Store Connect API](https://developer.apple.com/documentation/appstoreconnectapi).
 
 Through this MCP service, AI assistants (such as Claude, Gemini, etc.) can query and manage various App Store Connect resources directly within your editor — including app details, build versions, TestFlight testing, localization text (subtitles, descriptions, keywords), customer review replies, and team member management — greatly improving development and release automation.
