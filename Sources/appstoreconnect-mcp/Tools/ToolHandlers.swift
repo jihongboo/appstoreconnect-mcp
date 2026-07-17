@@ -110,13 +110,17 @@ public struct ToolHandlers {
                     let promotional_text: String?
                     let description: String?
                     let keywords: String?
+                    let support_url: String?
+                    let marketing_url: String?
                 }
                 let args = try JSONUtils.decode(arguments, to: Args.self)
                 let localization = try await client.updateAppStoreVersionLocalizations(
                     localizationId: args.localization_id,
                     promotionalText: args.promotional_text,
                     description: args.description,
-                    keywords: args.keywords
+                    keywords: args.keywords,
+                    supportUrl: args.support_url,
+                    marketingUrl: args.marketing_url
                 )
                 return CallTool.Result(
                     content: [.text(text: JSONUtils.prettyPrint(localization), annotations: nil, _meta: nil)],

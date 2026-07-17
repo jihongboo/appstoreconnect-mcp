@@ -101,17 +101,24 @@ public struct ASCClient {
         return response.data
     }
 
-    /// Update version localization (promotionalText, description, keywords)
+    /// Update version localization (promotionalText, description, keywords, supportUrl, marketingUrl)
     public func updateAppStoreVersionLocalizations(
         localizationId: String,
         promotionalText: String?,
         description: String?,
-        keywords: String?
+        keywords: String?,
+        supportUrl: String?,
+        marketingUrl: String?
     ) async throws -> AppStoreVersionLocalization {
+        let marketingURL = marketingUrl.flatMap { URL(string: $0) }
+        let supportURL = supportUrl.flatMap { URL(string: $0) }
+
         let attributes = AppStoreVersionLocalizationUpdateRequest.Data.Attributes(
             description: description,
             keywords: keywords,
-            promotionalText: promotionalText
+            marketingURL: marketingURL,
+            promotionalText: promotionalText,
+            supportURL: supportURL
         )
         let data = AppStoreVersionLocalizationUpdateRequest.Data(
             type: .appStoreVersionLocalizations,

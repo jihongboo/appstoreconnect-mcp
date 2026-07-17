@@ -111,7 +111,7 @@ public struct ToolDefinitions {
 
     public static let updateAppStoreVersionLocalizations = Tool(
         name: "update_app_store_version_localizations",
-        description: "Update the localized metadata (promotional text, description, keywords) of an App Store version localization.",
+        description: "Update the localized metadata (promotional text, description, keywords, support URL, marketing URL) of an App Store version localization.",
         inputSchema: .object([
             "type": .string("object"),
             "properties": .object([
@@ -130,6 +130,14 @@ public struct ToolDefinitions {
                 "keywords": .object([
                     "type": .string("string"),
                     "description": .string("The keywords for search separated by commas (optional).")
+                ]),
+                "support_url": .object([
+                    "type": .string("string"),
+                    "description": .string("The support URL (optional).")
+                ]),
+                "marketing_url": .object([
+                    "type": .string("string"),
+                    "description": .string("The marketing URL (optional).")
                 ])
             ]),
             "required": .array([.string("localization_id")])
