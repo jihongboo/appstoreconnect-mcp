@@ -46,51 +46,102 @@ This service exposes the following 20 core API tools via MCP:
 
 ---
 
-## 🛠️ Build & Install
+## 🛠️ Installation & Setup
 
-This server is a native Swift command-line program. You can build it locally using `xcodebuild`:
+This server is a native Swift command-line program targeting macOS 15 and above. You can install it using one of the methods below:
+
+### Option 1: Via Homebrew (Recommended)
+
+If you use macOS, you can easily install the app store connect MCP server from a Homebrew Tap:
 
 ```bash
-cd /Users/jihongbo/Developer/appstoreconnect-mcp
-xcodebuild -project appstoreconnect-mcp.xcodeproj -scheme MyTool -configuration Debug
+brew install <your-github-username>/tap/appstoreconnect-mcp
 ```
 
-The built binary will be located at:
-`/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool`
+This will automatically download the pre-compiled, code-signed, and Apple-notarized binary and link it to your system PATH. Once installed, you can verify it by running:
+
+```bash
+appstoreconnect-mcp --test
+```
+
+### Option 2: Pre-compiled Binaries (GitHub Releases)
+
+1. Go to the [Releases](https://github.com/<your-github-username>/appstoreconnect-mcp/releases) page.
+2. Download the latest `appstoreconnect-mcp.zip` archive.
+3. Extract the archive to a directory on your machine.
+4. Run the executable in your terminal or configure its path in your MCP client.
+
+### Option 3: Build from Source
+
+If you prefer to compile the application locally, clone this repository and build using Swift Package Manager:
+
+```bash
+git clone https://github.com/<your-github-username>/appstoreconnect-mcp.git
+cd appstoreconnect-mcp
+swift build -c release
+```
+
+The compiled binary will be located at:
+`.build/release/appstoreconnect-mcp`
 
 ---
 
-## ⚙️ MCP Host Configuration
+## ⚙️ MCP Client Configuration
 
-Add the following configuration to your global MCP config file (typically located at `/Users/jihongbo/.gemini/config/mcp_config.json` or `/Users/yourusername/.codeium/config.json`):
+To integrate this server with your AI assistant (e.g., Claude Desktop, Cursor, etc.), add the configuration to your global MCP host settings file (typically `~/Library/Application Support/Claude/mcp_config.json` for Claude Desktop).
 
+### If installed via Homebrew:
 ```json
 {
   "mcpServers": {
     "appstoreconnect-mcp": {
-      "command": "/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool",
+      "command": "appstoreconnect-mcp",
       "args": [],
       "env": {
-        "APP_STORE_CONNECT_ISSUER_ID": "Your_Issuer_ID_Ex_4f70c262-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-        "APP_STORE_CONNECT_PRIVATE_KEY_ID": "Your_Key_ID_Ex_TKY25M6624",
-        "APP_STORE_CONNECT_PRIVATE_KEY_PATH": "/Users/yourusername/Downloads/AuthKey_TKY25M6624.p8"
+        "APP_STORE_CONNECT_ISSUER_ID": "your-issuer-id",
+        "APP_STORE_CONNECT_PRIVATE_KEY_ID": "your-key-id",
+        "APP_STORE_CONNECT_PRIVATE_KEY_PATH": "/Users/username/keys/AuthKey_xxxx.p8"
       }
     }
   }
 }
 ```
 
-### 🔑 Environment Variables:
-1. `APP_STORE_CONNECT_ISSUER_ID`: The Issuer ID from the top of the Apple API Keys page.
-2. `APP_STORE_CONNECT_PRIVATE_KEY_ID`: The Key ID of your private key.
-3. `APP_STORE_CONNECT_PRIVATE_KEY_PATH`: The **absolute path** to your `.p8` private key file downloaded from App Store Connect.
+### If using downloaded/compiled binary:
+Set the `"command"` field to the absolute path of the `appstoreconnect-mcp` binary:
+```json
+{
+  "mcpServers": {
+    "appstoreconnect-mcp": {
+      "command": "/absolute/path/to/appstoreconnect-mcp",
+      "args": [],
+      "env": {
+        "APP_STORE_CONNECT_ISSUER_ID": "your-issuer-id",
+        "APP_STORE_CONNECT_PRIVATE_KEY_ID": "your-key-id",
+        "APP_STORE_CONNECT_PRIVATE_KEY_PATH": "/Users/username/keys/AuthKey_xxxx.p8"
+      }
+    }
+  }
+}
+```
+
+### 🔑 Environment Variables & Credentials:
+To authorize requests to Apple App Store Connect, configure these variables:
+1. `APP_STORE_CONNECT_ISSUER_ID`: Your Apple Developer Issuer ID (UUID format).
+2. `APP_STORE_CONNECT_PRIVATE_KEY_ID`: Your 10-character API Key ID.
+3. `APP_STORE_CONNECT_PRIVATE_KEY_PATH`: The **absolute path** to your downloaded `.p8` private key file.
+4. `APP_STORE_CONNECT_PRIVATE_KEY`: *(Alternative)* The raw content of your PEM private key. Use this instead of `APP_STORE_CONNECT_PRIVATE_KEY_PATH` if you prefer to inline the credentials or run in environment where writing files is not ideal.
 
 ---
 
-## 💻 Debugging & CLI Testing
+## 💻 Diagnostics & Testing
 
-You can also run the binary directly in your terminal for point diagnostics. Pass the `--test` flag to automatically check your API connection and credentials:
+You can run the binary with the `--test` flag in your terminal to verify API authentication. If you run it interactively, it will prompt you for missing environment parameters:
 
 ```bash
-/Users/jihongbo/Library/Developer/Xcode/DerivedData/appstoreconnect-mcp-dzybcwfrwbweqicopheydixfpeol/Build/Products/Debug/MyTool --test
+# If installed via Homebrew
+appstoreconnect-mcp --test
+
+# If using local binary
+/path/to/appstoreconnect-mcp --test
 ```

@@ -16,6 +16,7 @@ jobs:
     env:
       BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
     steps:
       - uses: actions/checkout@v7
 
@@ -97,5 +98,43 @@ jobs:
           gh release upload "${GITHUB_REF_NAME}" .build/release/appstoreconnect-mcp --clobber
           if [ -f .build/release/appstoreconnect-mcp.zip ]; then
             gh release upload "${GITHUB_REF_NAME}" .build/release/appstoreconnect-mcp.zip --clobber
+          fi
+
+      - name: Update Homebrew Formula
+        if: startsWith(github.ref, 'refs/tags/v') && env.HOMEBREW_TAP_TOKEN != ''
+        run: |
+          # Calculate SHA256 of the zip file
+          SHA256=$(shasum -a 256 .build/release/appstoreconnect-mcp.zip | awk '{print $1}')
+          
+          # Parse clean version string (removing leading v)
+          VERSION=$(echo "${{ github.ref_name }}" | sed 's/^v//')
+          
+          # Define final download URL
+          DOWNLOAD_URL="https://github.com/${{ github.repository_owner }}/appstoreconnect-mcp/releases/download/${{ github.ref_name }}/appstoreconnect-mcp.zip"
+          
+          # Interpolate template into formula file
+          sed -e "s|__OWNER__|${{ github.repository_owner }}|g" \
+              -e "s|__URL__|${DOWNLOAD_URL}|g" \
+              -e "s|__SHA256__|${SHA256}|g" \
+              -e "s|__VERSION__|${VERSION}|g" \
+              .github/formula_template.rb > appstoreconnect-mcp.rb
+              
+          # Clone target homebrew-tap repo
+          git clone https://x-access-token:${{ secrets.HOMEBREW_TAP_TOKEN }}@github.com/${{ github.repository_owner }}/homebrew-tap.git homebrew-tap-repo
+          cd homebrew-tap-repo
+          mkdir -p Formula
+          cp ../appstoreconnect-mcp.rb Formula/appstoreconnect-mcp.rb
+          
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Commit and push
+          git add Formula/appstoreconnect-mcp.rb
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "No changes detected in Formula file."
+          else
+            git commit -m "Update appstoreconnect-mcp to version ${VERSION}"
+            git push origin main || git push origin master
           fi
 
